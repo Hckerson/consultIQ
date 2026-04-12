@@ -1,6 +1,11 @@
-type Weights = "price" | "urgency";
-type LeadStatus = "approved" | "rejected" | "action_required";
+type Weights =
+  | "price"
+  | "urgency"
+  | "industry"
+  | "strategicValue"
+  | "scopeClarity";
 type Levels = "low" | "medium" | "high";
+type LeadDecision = "reject" | "hold" | "pursue" | "priority-pursue";
 type RiskLevel = Levels;
 
-export type { Weights, LeadStatus, Levels, RiskLevel };
+export type { Weights, LeadDecision, Levels, RiskLevel };

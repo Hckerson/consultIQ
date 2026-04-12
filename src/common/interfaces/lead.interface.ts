@@ -1,3 +1,5 @@
+import { LeadDecision } from "../types/lead.type";
+
 export class LeadBlocker {
   needs: string[];
   problems: string[];
@@ -5,10 +7,7 @@ export class LeadBlocker {
 }
 
 export class LeadClientInfo {
-  companySize: {
-    min: number;
-    max: number;
-  };
+  companySize:number
   location: string;
   industry: string;
   auhority: {
@@ -16,7 +15,7 @@ export class LeadClientInfo {
       name: string;
       position: string;
     }[];
-    decisionMakers: {
+    executives: {
       name: string;
       position: string;
     }[];
@@ -31,7 +30,6 @@ export class LeadClientInfo {
 export class LeadRequirements {
   budget: string;
   service: string;
-  urgency;
   timeline: string;
   desires: string[];
 }
@@ -47,4 +45,6 @@ export class LeadTermination {
   endDate: string;
 }
 
-export class LeadResponse {}
+export class LeadResponse {
+  decision: LeadDecision;
+}
