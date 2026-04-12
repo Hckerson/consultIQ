@@ -2,7 +2,7 @@ import { Weights } from "../types/lead.type";
 
 const LeadWeights: Record<Weights, number> = {
   price: 0.4,
-  urgency: 0.3,
+  urgency: 0.3
 };
 
 const LeadWeightsSum = Object.values(LeadWeights).reduce((a, b) => a + b, 0);
