@@ -5,6 +5,7 @@ import { AppController } from "./app.controller";
 import { AuthModule } from "./modules/auth/auth.module";
 import { HealthModule } from "./modules/health/health.module";
 import { HttpExceptionFilter } from "./common/filters/http-exception-filter";
+import { LeadsModule } from './modules/core/leads/leads.module';
 
 @Module({
   providers: [
@@ -19,6 +20,6 @@ import { HttpExceptionFilter } from "./common/filters/http-exception-filter";
     },
   ],
   controllers: [AppController],
-  imports: [AuthModule, HealthModule, AuthModule],
+  imports: [AuthModule, HealthModule, AuthModule, LeadsModule],
 })
 export class AppModule {}

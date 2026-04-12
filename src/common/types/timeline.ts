@@ -1,3 +1,2 @@
-type LeadUrgency = "urgent" | "";
-
+type LeadUrgency = "low" | "medium" | "high" | "immediate";
 export type { LeadUrgency };
