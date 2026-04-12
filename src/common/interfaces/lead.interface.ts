@@ -1,10 +1,3 @@
-export class Lead {
-  blockers: LeadBlocker;
-  clientInfo: LeadClientInfo;
-  termination: LeadTermination;
-  requirements: LeadRequirements;
-}
-
 class LeadBlocker {
   needs: string[];
   problems: string[];
@@ -38,12 +31,20 @@ class LeadClientInfo {
 class LeadRequirements {
   budget: string;
   service: string;
-  urgency
+  urgency;
   timeline: string;
   desires: string[];
 }
 
+export class Lead {
+  blockers: LeadBlocker;
+  clientInfo: LeadClientInfo;
+  termination: LeadTermination;
+  requirements: LeadRequirements;
+}
 class LeadTermination {
   reason: string;
   endDate: string;
 }
+
+export class LeadResponse {}
