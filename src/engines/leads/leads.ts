@@ -34,7 +34,7 @@ export class Leads {
       const { blockers, clientInfo, requirements, termination } = this.leadData;
       this.processBlockers(blockers);
       this.processClientInfo(clientInfo);
-      this.processRequirements(requirements);
+      this.processRequirements(requirements, "", 0);
       this.processTermination(termination);
     } catch (error) {
       logger.log("Error processing lead", error);
@@ -48,7 +48,7 @@ export class Leads {
     // const total: number = 25;
 
     let forFeit = 0;
-    Object.entries(data).forEach(([_, value]) => {
+    Object.entries(data).forEach(([,value]) => {
       if (!value) {
         forFeit += 2;
       }
