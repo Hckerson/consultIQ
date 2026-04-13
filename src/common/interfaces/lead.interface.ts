@@ -7,19 +7,15 @@ export class LeadBlocker {
 }
 
 export class LeadClientInfo {
-  companySize:number
+  companySize: number;
   location: string;
   industry: string;
-  auhority: {
+  authority: {
     activeInfluencers: {
       name: string;
       position: string;
     }[];
-    executives: {
-      name: string;
-      position: string;
-    }[];
-    substitutes: {
+    stakeHolders: {
       name: string;
       position: string;
     }[];
@@ -28,9 +24,8 @@ export class LeadClientInfo {
 }
 
 export class LeadRequirements {
-  budget: string;
-  service: string;
-  timeline: string;
+  budget: number;
+  timeFrame: number;
   desires: string[];
 }
 
