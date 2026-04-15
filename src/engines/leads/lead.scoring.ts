@@ -44,11 +44,10 @@ export class Leads {
   protected processOmission(
     data: LeadBlocker | LeadClientInfo | LeadRequirements | LeadTermination,
   ) {
-    let score: number = 0;
-    // const total: number = 25;
+    let score: number = 0;    // const total: number = 25;
 
     let forFeit = 0;
-    Object.entries(data).forEach(([,value]) => {
+    Object.entries(data).forEach(([, value]) => {
       if (!value) {
         forFeit += 2;
       }
@@ -71,7 +70,6 @@ export class Leads {
 
   protected processClientInfo(clientInfo: LeadClientInfo): RiskLevel {
     let score: number = 0;
-    // const total: number = 25;
     const { companySize, location, industry, authority, intelletualProperty } =
       clientInfo;
 
@@ -136,7 +134,6 @@ export class Leads {
     companySize: number,
   ): RiskLevel {
     let score: number = 0;
-    // const total: number = 25;
 
     const forFeit = this.processOmission(requirements);
     const { budget, timeFrame, desires } = requirements;
@@ -213,12 +210,19 @@ export class Leads {
 
   protected processTermination(termination: LeadTermination): RiskLevel {
     let score: number = 0;
-    // const total: number = 25;
 
     const forFeit = this.processOmission(termination);
 
-    score -= forFeit;
+    const { percentageRefund } = termination;
 
+    if (percentageRefund < 10) {
+      score += 25;
+    } else if (percentageRefund < 25) {
+      score += 20;
+    } else {
+      score += 15;
+    }
+    score -= forFeit;
     const value = score < 10 ? "low" : score < 20 ? "medium" : "high";
     return value;
   }

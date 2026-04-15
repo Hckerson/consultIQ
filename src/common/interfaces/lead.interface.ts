@@ -36,8 +36,7 @@ export class Lead {
   requirements: LeadRequirements;
 }
 export class LeadTermination {
-  reason: string;
-  endDate: string;
+  percentageRefund: number;
 }
 
 export class LeadResponse {

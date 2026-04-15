@@ -1,4 +1,4 @@
-import { Leads } from './leads';
+import { Leads } from './lead.scoring';
 
 describe('Leads', () => {
   it('should be defined', () => {
