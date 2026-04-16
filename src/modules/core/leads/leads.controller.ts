@@ -1,5 +1,5 @@
 import { LeadsService } from "./leads.service";
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Get, InternalServerErrorException, Post } from "@nestjs/common";
 import { LeadInput } from "src/common/schema/lead.schema";
 
 @Controller("leads")
@@ -9,5 +9,10 @@ export class LeadsController {
   @Post()
   processLead(@Body() lead: LeadInput) {
     return this.leadsService.processLead(lead);
+  }
+
+  @Get("test")
+  test() {
+    throw new InternalServerErrorException("Bad boy");
   }
 }

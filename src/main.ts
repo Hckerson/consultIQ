@@ -1,12 +1,14 @@
 import "dotenv/config";
-import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
+import { NestFactory } from "@nestjs/core";
+import { appConfig } from "./common/config/app.config";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableShutdownHooks();
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(appConfig.port ?? 3000);
+  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap().catch((error) => {
   console.error("Application failed to start:", error);
