@@ -15,8 +15,8 @@ export const leadConfig = {
     max: 25,
   },
   budget: {
-    small: 750,
-    medium: 1000,
+    small: 3000,
+    medium: 3000,
     large: 7500,
     enterprise: 10000,
   },

@@ -151,20 +151,20 @@ export class LeadScoringEngine {
         favourableIndustry.includes(industry) &&
         companySize > leadConfig.companySize.small
       ) {
-        if (budget < leadConfig.budget.medium) {
+        if (budget < leadConfig.budget.large) {
           score += +requirementsWeights.budget * leadConfig.scores.base;
           if (timeFrame > timeline.medium) {
-            score += +requirementsWeights.timeline * leadConfig.scores.base;
+            score += +requirementsWeights.timeline * leadConfig.scores.standard;
           } else {
             score += +requirementsWeights.timeline * leadConfig.scores.boost;
           }
           if (desires.length > desireLength.medium) {
-            score += +requirementsWeights.desires * leadConfig.scores.base;
+            score += +requirementsWeights.desires * leadConfig.scores.standard;
           } else {
             score += +requirementsWeights.desires * leadConfig.scores.boost;
           }
         } else if (budget < leadConfig.budget.enterprise) {
-          score += +requirementsWeights.budget * leadConfig.scores.boost;
+          score += +requirementsWeights.budget * leadConfig.scores.standard;
           if (timeFrame > timeline.long) {
             score += +requirementsWeights.timeline * leadConfig.scores.standard;
           } else {
@@ -182,7 +182,7 @@ export class LeadScoringEngine {
         }
       } else {
         if (budget < leadConfig.budget.small) {
-          score += +requirementsWeights.budget * leadConfig.scores.standard;
+          score += +requirementsWeights.budget * leadConfig.scores.base;
           if (timeFrame > timeline.short) {
             score += +requirementsWeights.timeline * leadConfig.scores.standard;
           } else {
@@ -193,8 +193,8 @@ export class LeadScoringEngine {
           } else {
             score += +requirementsWeights.desires * leadConfig.scores.boost;
           }
-        } else if (budget < leadConfig.budget.large) {
-          score += +requirementsWeights.budget * leadConfig.scores.boost;
+        } else if (budget < leadConfig.budget.medium) {
+          score += +requirementsWeights.budget * leadConfig.scores.standard;
           if (timeFrame > timeline.medium) {
             score += +requirementsWeights.timeline * leadConfig.scores.standard;
           } else {

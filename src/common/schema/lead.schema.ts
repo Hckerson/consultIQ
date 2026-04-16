@@ -1,39 +1,89 @@
-import * as z from "zod";
+import { Type } from "class-transformer";
+import { IsArray, IsNumber, IsString, ValidateNested } from "class-validator";
 
-export const leadSchema = z.object({
-  termination: z.object({
-    percentageRefund: z.number(),
-  }),
-  requirements: z.object({
-    budget: z.number(),
-    timeFrame: z.number(),
-    desires: z.array(z.string()),
-  }),
-  blockers: z.object({
-    needs: z.array(z.string()),
-    problems: z.array(z.string()),
-    situation: z.array(z.string()),
-  }),
-  clientInfo: z.object({
-    location: z.string(),
-    industry: z.string(),
-    companySize: z.number(),
-    authority: z.object({
-      activeInfluencers: z.array(
-        z.object({
-          name: z.string(),
-          position: z.string(),
-        }),
-      ),
-      stakeHolders: z.array(
-        z.object({
-          name: z.string(),
-          position: z.string(),
-        }),
-      ),
-    }),
-    intelletualProperty: z.string(),
-  }),
-});
+export class TerminationInfo {
+  @IsNumber()
+  percentageRefund: number;
+}
 
-export type LeadInput = z.infer<typeof leadSchema>;
+export class RequirementsInfo {
+  @IsNumber()
+  budget: number;
+
+  @IsNumber()
+  timeFrame: number;
+
+  @IsArray()
+  @IsString({ each: true })
+  desires: string[];
+}
+
+export class BlockersInfo {
+  @IsArray()
+  @IsString({ each: true })
+  needs: string[];
+
+  @IsArray()
+  @IsString({ each: true })
+  problems: string[];
+
+  @IsArray()
+  @IsString({ each: true })
+  situation: string[];
+}
+
+export class InfluencerInfo {
+  @IsString()
+  name: string;
+
+  @IsString()
+  position: string;
+}
+
+export class AuthorityInfo {
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => InfluencerInfo)
+  activeInfluencers: InfluencerInfo[];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => InfluencerInfo)
+  stakeHolders: InfluencerInfo[];
+}
+
+export class ClientInfo {
+  @IsString()
+  location: string;
+
+  @IsString()
+  industry: string;
+
+  @IsNumber()
+  companySize: number;
+
+  @ValidateNested()
+  @Type(() => AuthorityInfo)
+  authority: AuthorityInfo;
+
+  @IsString()
+  intelletualProperty: string;
+}
+
+export class LeadInput {
+  @ValidateNested()
+  @Type(() => TerminationInfo)
+  termination: TerminationInfo;
+
+  @ValidateNested()
+  @Type(() => RequirementsInfo)
+  requirements: RequirementsInfo;
+
+  @ValidateNested()
+  @Type(() => BlockersInfo)
+  blockers: BlockersInfo;
+
+  @ValidateNested()
+  @Type(() => ClientInfo)
+  clientInfo: ClientInfo;
+}
