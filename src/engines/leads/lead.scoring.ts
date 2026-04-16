@@ -1,12 +1,13 @@
-import { Injectable } from "@nestjs/common";
 import { logger } from "src/lib/logger";
+import { leadConfig } from "./lead.config";
+import { Injectable } from "@nestjs/common";
 import { RiskLevel } from "src/common/types/lead.type";
+import { LeadInput } from "src/common/schema/lead.schema";
 import {
   clientInfoWeights,
   requirementsWeights,
 } from "src/common/data/weights";
 import {
-  Lead,
   LeadBlocker,
   LeadClientInfo,
   LeadRequirements,
@@ -22,34 +23,43 @@ import {
 } from "src/common/data/determinants";
 
 @Injectable()
-export class Leads {
-  private readonly leadData: Lead;
+export class LeadScoringEngine {
+  constructor() {}
 
-  constructor(private lead: Lead) {
-    this.leadData = lead;
-  }
+  processLead(lead: LeadInput): RiskLevel {
+    let leadScore: number = 0;
 
-  protected processLead() {
     try {
-      const { blockers, clientInfo, requirements, termination } = this.leadData;
-      this.processBlockers(blockers);
-      this.processClientInfo(clientInfo);
-      this.processRequirements(requirements, "", 0);
-      this.processTermination(termination);
+      const { blockers, clientInfo, requirements, termination } = lead;
+      leadScore += this.processBlockers(blockers);
+      leadScore += this.processClientInfo(clientInfo);
+      leadScore += this.processRequirements(
+        requirements,
+        clientInfo.industry,
+        clientInfo.companySize,
+      );
+      leadScore += this.processTermination(termination);
     } catch (error) {
       logger.log("Error processing lead", error);
+      return "low";
     }
+
+    return leadScore < leadConfig.riskThresholds.low
+      ? "low"
+      : leadScore < leadConfig.riskThresholds.medium
+        ? "medium"
+        : "high";
   }
 
   protected processOmission(
     data: LeadBlocker | LeadClientInfo | LeadRequirements | LeadTermination,
-  ) {
-    let score: number = 0;    // const total: number = 25;
+  ): number {
+    let score: number = 0; // const total: number = 25;
 
     let forFeit = 0;
     Object.entries(data).forEach(([, value]) => {
       if (!value) {
-        forFeit += 2;
+        forFeit += leadConfig.omissionForfeit;
       }
     });
 
@@ -57,18 +67,17 @@ export class Leads {
     return score;
   }
 
-  protected processBlockers(blockers: LeadBlocker): RiskLevel {
+  protected processBlockers(blockers: LeadBlocker): number {
     // this would be done using ai
     let score: number = 0;
 
     const forfeit = this.processOmission(blockers);
     score -= forfeit;
 
-    const value = score < 10 ? "low" : score < 20 ? "medium" : "high";
-    return value;
+    return score;
   }
 
-  protected processClientInfo(clientInfo: LeadClientInfo): RiskLevel {
+  protected processClientInfo(clientInfo: LeadClientInfo): number {
     let score: number = 0;
     const { companySize, location, industry, authority, intelletualProperty } =
       clientInfo;
@@ -77,153 +86,153 @@ export class Leads {
 
     // process company size
     if (companySize) {
-      if (companySize < 100) {
-        score += +clientInfoWeights.companySize * 10;
-      } else if (companySize < 1000) {
-        score += +clientInfoWeights.companySize * 20;
+      if (companySize < leadConfig.companySize.small) {
+        score += +clientInfoWeights.companySize * leadConfig.scores.base;
+      } else if (companySize < leadConfig.companySize.medium) {
+        score += +clientInfoWeights.companySize * leadConfig.scores.boost;
       } else {
-        score += +clientInfoWeights.companySize * 25;
+        score += +clientInfoWeights.companySize * leadConfig.scores.max;
       }
     }
 
     // process location
     if (location) {
       if (favourableLocation.includes(location)) {
-        score += +clientInfoWeights.location * 25;
+        score += +clientInfoWeights.location * leadConfig.scores.max;
       } else if (unfavourableLocation.includes(location)) {
-        score += +clientInfoWeights.location * 10;
+        score += +clientInfoWeights.location * leadConfig.scores.base;
       } else {
-        score += +clientInfoWeights.location * 20;
+        score += +clientInfoWeights.location * leadConfig.scores.boost;
       }
     }
 
     // process industry
     if (industry) {
       if (favourableIndustry.includes(industry)) {
-        score += +clientInfoWeights.industry * 25;
+        score += +clientInfoWeights.industry * leadConfig.scores.max;
       } else if (unfavourableIndustry.includes(industry)) {
-        score += +clientInfoWeights.industry * 10;
+        score += +clientInfoWeights.industry * leadConfig.scores.base;
       } else {
-        score += +clientInfoWeights.industry * 20;
+        score += +clientInfoWeights.industry * leadConfig.scores.boost;
       }
     }
 
     // process intellectual Property
     if (intelletualProperty) {
-      score += +clientInfoWeights.intelletualProperty * 25;
+      score += +clientInfoWeights.intelletualProperty * leadConfig.scores.max;
     } else {
-      score += +clientInfoWeights.intelletualProperty * 10;
+      score += +clientInfoWeights.intelletualProperty * leadConfig.scores.base;
     }
 
     if (authority) {
       const { activeInfluencers, stakeHolders } = authority;
       if (activeInfluencers.length > stakeHolders.length)
-        score += +clientInfoWeights.authority * 10;
-      else score += +clientInfoWeights.authority * 25;
+        score += +clientInfoWeights.authority * leadConfig.scores.base;
+      else score += +clientInfoWeights.authority * leadConfig.scores.max;
     }
 
     score -= forFeit;
 
-    const value = score < 10 ? "low" : score < 20 ? "medium" : "high";
-    return value;
+    return score;
   }
 
   protected processRequirements(
     requirements: LeadRequirements,
     industry: string,
     companySize: number,
-  ): RiskLevel {
+  ): number {
     let score: number = 0;
 
     const forFeit = this.processOmission(requirements);
     const { budget, timeFrame, desires } = requirements;
 
     if (budget) {
-      if (favourableIndustry.includes(industry) && companySize > 100) {
-        if (budget < 1000) {
-          score += +requirementsWeights.budget * 10;
+      if (
+        favourableIndustry.includes(industry) &&
+        companySize > leadConfig.companySize.small
+      ) {
+        if (budget < leadConfig.budget.medium) {
+          score += +requirementsWeights.budget * leadConfig.scores.base;
           if (timeFrame > timeline.medium) {
-            score += +requirementsWeights.timeline * 10;
+            score += +requirementsWeights.timeline * leadConfig.scores.base;
           } else {
-            score += +requirementsWeights.timeline * 20;
+            score += +requirementsWeights.timeline * leadConfig.scores.boost;
           }
           if (desires.length > desireLength.medium) {
-            score += +requirementsWeights.desires * 10;
+            score += +requirementsWeights.desires * leadConfig.scores.base;
           } else {
-            score += +requirementsWeights.desires * 20;
+            score += +requirementsWeights.desires * leadConfig.scores.boost;
           }
-        } else if (budget < 10000) {
-          score += +requirementsWeights.budget * 20;
+        } else if (budget < leadConfig.budget.enterprise) {
+          score += +requirementsWeights.budget * leadConfig.scores.boost;
           if (timeFrame > timeline.long) {
-            score += +requirementsWeights.timeline * 15;
+            score += +requirementsWeights.timeline * leadConfig.scores.standard;
           } else {
-            score += +requirementsWeights.timeline * 20;
+            score += +requirementsWeights.timeline * leadConfig.scores.boost;
           }
           if (desires.length > desireLength.large) {
-            score += +requirementsWeights.desires * 15;
+            score += +requirementsWeights.desires * leadConfig.scores.standard;
           } else {
-            score += +requirementsWeights.desires * 20;
+            score += +requirementsWeights.desires * leadConfig.scores.boost;
           }
         } else {
-          score += +requirementsWeights.budget * 25;
-          score += +requirementsWeights.timeline * 25;
-          score += +requirementsWeights.desires * 25;
+          score += +requirementsWeights.budget * leadConfig.scores.max;
+          score += +requirementsWeights.timeline * leadConfig.scores.max;
+          score += +requirementsWeights.desires * leadConfig.scores.max;
         }
       } else {
-        if (budget < 750) {
-          score += +requirementsWeights.budget * 15;
+        if (budget < leadConfig.budget.small) {
+          score += +requirementsWeights.budget * leadConfig.scores.standard;
           if (timeFrame > timeline.short) {
-            score += +requirementsWeights.timeline * 15;
+            score += +requirementsWeights.timeline * leadConfig.scores.standard;
           } else {
-            score += +requirementsWeights.timeline * 20;
+            score += +requirementsWeights.timeline * leadConfig.scores.boost;
           }
           if (desires.length > desireLength.small) {
-            score += +requirementsWeights.desires * 15;
+            score += +requirementsWeights.desires * leadConfig.scores.standard;
           } else {
-            score += +requirementsWeights.desires * 20;
+            score += +requirementsWeights.desires * leadConfig.scores.boost;
           }
-        } else if (budget < 7500) {
-          score += +requirementsWeights.budget * 20;
+        } else if (budget < leadConfig.budget.large) {
+          score += +requirementsWeights.budget * leadConfig.scores.boost;
           if (timeFrame > timeline.medium) {
-            score += +requirementsWeights.timeline * 15;
+            score += +requirementsWeights.timeline * leadConfig.scores.standard;
           } else {
-            score += +requirementsWeights.timeline * 20;
+            score += +requirementsWeights.timeline * leadConfig.scores.boost;
           }
           if (desires.length > desireLength.medium) {
-            score += +requirementsWeights.desires * 15;
+            score += +requirementsWeights.desires * leadConfig.scores.standard;
           } else {
-            score += +requirementsWeights.desires * 20;
+            score += +requirementsWeights.desires * leadConfig.scores.boost;
           }
         } else {
-          score += +requirementsWeights.budget * 25;
-          score += +requirementsWeights.timeline * 25;
-          score += +requirementsWeights.desires * 25;
+          score += +requirementsWeights.budget * leadConfig.scores.max;
+          score += +requirementsWeights.timeline * leadConfig.scores.max;
+          score += +requirementsWeights.desires * leadConfig.scores.max;
         }
       }
     }
 
     score -= forFeit;
 
-    const value = score < 10 ? "low" : score < 20 ? "medium" : "high";
-    return value;
+    return score;
   }
 
-  protected processTermination(termination: LeadTermination): RiskLevel {
+  protected processTermination(termination: LeadTermination): number {
     let score: number = 0;
 
     const forFeit = this.processOmission(termination);
 
     const { percentageRefund } = termination;
 
-    if (percentageRefund < 10) {
-      score += 25;
-    } else if (percentageRefund < 25) {
-      score += 20;
+    if (percentageRefund < leadConfig.refundThresholds.low) {
+      score += leadConfig.scores.max;
+    } else if (percentageRefund < leadConfig.refundThresholds.high) {
+      score += leadConfig.scores.boost;
     } else {
-      score += 15;
+      score += leadConfig.scores.standard;
     }
     score -= forFeit;
-    const value = score < 10 ? "low" : score < 20 ? "medium" : "high";
-    return value;
+    return score;
   }
 }
