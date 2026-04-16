@@ -87,7 +87,7 @@ export class LeadScoringEngine {
     // process company size
     if (companySize) {
       if (companySize < leadConfig.companySize.small) {
-        score += +clientInfoWeights.companySize * leadConfig.scores.base;
+        score += +clientInfoWeights.companySize * leadConfig.scores.standard;
       } else if (companySize < leadConfig.companySize.medium) {
         score += +clientInfoWeights.companySize * leadConfig.scores.boost;
       } else {
@@ -102,7 +102,7 @@ export class LeadScoringEngine {
       } else if (unfavourableLocation.includes(location)) {
         score += +clientInfoWeights.location * leadConfig.scores.base;
       } else {
-        score += +clientInfoWeights.location * leadConfig.scores.boost;
+        score += +clientInfoWeights.location * leadConfig.scores.standard;
       }
     }
 
@@ -113,7 +113,7 @@ export class LeadScoringEngine {
       } else if (unfavourableIndustry.includes(industry)) {
         score += +clientInfoWeights.industry * leadConfig.scores.base;
       } else {
-        score += +clientInfoWeights.industry * leadConfig.scores.boost;
+        score += +clientInfoWeights.industry * leadConfig.scores.standard;
       }
     }
 
