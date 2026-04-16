@@ -11,7 +11,7 @@ export class EventService extends EventEmitter {
   initializeError() {
     this.on("error", (error) => {
       logger.error(`Event error`, error);
-      throw new InternalServerErrorException()
+      throw new InternalServerErrorException();
     });
   }
 
@@ -23,7 +23,9 @@ export class EventService extends EventEmitter {
     });
   }
 
-  checkEventsRegistered() {}
+  checkEventsRegistered(eventName: string) {
+    return this.eventNames().includes(eventName);
+  }
 
   removeEvent(eventName: string) {
     this.removeListener(eventName, () => {
