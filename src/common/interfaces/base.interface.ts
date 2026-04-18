@@ -1,6 +1,6 @@
-import { IsString } from "class-validator";
+import { IsOptional, IsString } from "class-validator";
 
-export class BaseUser{
+export class BaseUser {
   @IsString()
   firstName: string;
 
@@ -17,15 +17,29 @@ export class BaseUser{
   address: string;
 
   @IsString()
-  city: string;
+  @IsOptional()
+  city?: string;
 
   @IsString()
-  state: string;
+  @IsOptional()
+  state?: string;
 
   @IsString()
-  zip: string;
+  @IsOptional()
+  zip?: string;
 
   @IsString()
-  country: string;
-  
+  @IsOptional()
+  country?: string;
+}
+
+export class BaseBooking {
+  @IsString()
+  status: string;
+
+  @IsString()
+  endDate: string;
+
+  @IsString()
+  startDate: string;
 }
