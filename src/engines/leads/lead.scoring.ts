@@ -1,5 +1,5 @@
 import { logger } from "src/lib/logger";
-import { leadConfig } from "./lead.config";
+import { leadConfig } from "../../common/config/lead.config";
 import { Injectable } from "@nestjs/common";
 import { RiskLevel } from "src/common/types/lead.type";
 import { Lead } from "src/common/interfaces/lead.interface";

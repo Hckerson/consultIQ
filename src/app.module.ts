@@ -1,6 +1,7 @@
 import { AppService } from "./app.service";
 import { AppController } from "./app.controller";
 import { APP_FILTER, APP_PIPE } from "@nestjs/core";
+import { EngineModule } from "./engines/engine.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { Module, ValidationPipe } from "@nestjs/common";
 import { HealthModule } from "./modules/health/health.module";
@@ -20,6 +21,6 @@ import { HttpExceptionFilter } from "./common/filters/http-exception-filter";
     },
   ],
   controllers: [AppController],
-  imports: [AuthModule, HealthModule, AuthModule, LeadsModule],
+  imports: [AuthModule, HealthModule, AuthModule, LeadsModule, EngineModule],
 })
 export class AppModule {}
