@@ -1,4 +1,4 @@
-type ConsultantSpecialization =
+type Specialization =
   | "Technology"
   | "Business"
   | "Finance"
@@ -7,4 +7,6 @@ type ConsultantSpecialization =
   | "Human Resources"
   | "Other";
 
-export type { ConsultantSpecialization };
+type ConsultantSpecialization = Specialization;
+
+export type { Specialization, ConsultantSpecialization };

@@ -1,13 +1,13 @@
 import { LeadsService } from "./leads.service";
+import { Lead } from "src/common/interfaces/lead.interface";
 import { Body, Controller, Get, InternalServerErrorException, Post } from "@nestjs/common";
-import { LeadInput } from "src/common/schema/lead.schema";
 
 @Controller("leads")
 export class LeadsController {
   constructor(private readonly leadsService: LeadsService) {}
 
   @Post()
-  processLead(@Body() lead: LeadInput) {
+  processLead(@Body() lead: Lead) {
     return this.leadsService.processLead(lead);
   }
 

@@ -2,7 +2,8 @@ import { logger } from "src/lib/logger";
 import { leadConfig } from "./lead.config";
 import { Injectable } from "@nestjs/common";
 import { RiskLevel } from "src/common/types/lead.type";
-import { LeadInput } from "src/common/schema/lead.schema";
+import { Lead } from "src/common/interfaces/lead.interface";
+
 import {
   clientInfoWeights,
   requirementsWeights,
@@ -26,7 +27,7 @@ import {
 export class LeadScoringEngine {
   constructor() {}
 
-  processLead(lead: LeadInput): RiskLevel {
+  processLead(lead: Lead): RiskLevel {
     let leadScore: number = 0;
 
     try {

@@ -1,6 +1,6 @@
-import { LeadInput } from "src/common/schema/lead.schema";
+import { Lead } from "src/common/interfaces/lead.interface";
 
-export default function LeadNormalizer(lead: LeadInput): LeadInput {
+export default function LeadNormalizer(lead: Lead): Lead {
   return {
     blockers: {
       needs: lead.blockers.needs.map((need) => need.trim()) || [],
@@ -10,7 +10,7 @@ export default function LeadNormalizer(lead: LeadInput): LeadInput {
     },
     clientInfo: {
       location: lead.clientInfo.location.trim() || "",
-      industry: lead.clientInfo.industry.trim() || "",
+      industry: lead.clientInfo.industry,
       companySize: lead.clientInfo.companySize || 0,
       authority: {
         activeInfluencers:
@@ -24,6 +24,7 @@ export default function LeadNormalizer(lead: LeadInput): LeadInput {
             position: stakeHolder.position.trim() || "",
           })) || [],
       },
+      niche: lead.clientInfo.niche.trim() || "",
       intelletualProperty: lead.clientInfo.intelletualProperty.trim() || "",
     },
     requirements: {
