@@ -21,7 +21,7 @@ export class Consultant extends BaseUser {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ConsultantBooking)
-  booking: ConsultantBooking[];
+  bookings: ConsultantBooking[];
 }
 
 export class ConsultantExperience {
@@ -45,7 +45,7 @@ export class ConsultantSkillSet {
     "Time Management",
     "Other",
   ])
-  skill: SkillSet;
+  name: SkillSet;
 
   @IsIn(["Beginner", "Intermediate", "Advanced", "Expert"])
   level: SkillLevel;
