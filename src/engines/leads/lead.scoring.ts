@@ -4,21 +4,15 @@ import { Injectable } from "@nestjs/common";
 import { RiskLevel } from "src/common/types/lead.type";
 import { Lead } from "src/common/interfaces/lead.interface";
 
-import {
-  clientInfoWeights,
-  requirementsWeights,
-} from "src/common/data/weights";
+import { clientInfoWeights } from "src/common/data/weights";
 import {
   LeadBlocker,
   LeadClientInfo,
-  LeadRequirements,
   LeadTermination,
 } from "src/common/interfaces/lead.interface";
 import {
-  desireLength,
   favourableIndustry,
   favourableLocation,
-  timeline,
   unfavourableIndustry,
   unfavourableLocation,
 } from "src/common/data/determinants";
@@ -31,14 +25,9 @@ export class LeadScoringEngine {
     let leadScore: number = 0;
 
     try {
-      const { blockers, clientInfo, requirements, termination } = lead;
+      const { blockers, clientInfo, termination } = lead;
       leadScore += this.processBlockers(blockers);
       leadScore += this.processClientInfo(clientInfo);
-      leadScore += this.processRequirements(
-        requirements,
-        clientInfo.industry,
-        clientInfo.companySize,
-      );
       leadScore += this.processTermination(termination);
     } catch (error) {
       logger.log("Error processing lead", error);
@@ -53,7 +42,7 @@ export class LeadScoringEngine {
   }
 
   protected processOmission(
-    data: LeadBlocker | LeadClientInfo | LeadRequirements | LeadTermination,
+    data: LeadBlocker | LeadClientInfo | LeadTermination,
   ): number {
     let score: number = 0; // const total: number = 25;
 
@@ -130,88 +119,6 @@ export class LeadScoringEngine {
       if (activeInfluencers.length > stakeHolders.length)
         score += +clientInfoWeights.authority * leadConfig.scores.base;
       else score += +clientInfoWeights.authority * leadConfig.scores.max;
-    }
-
-    score -= forFeit;
-
-    return score;
-  }
-
-  protected processRequirements(
-    requirements: LeadRequirements,
-    industry: string,
-    companySize: number,
-  ): number {
-    let score: number = 0;
-
-    const forFeit = this.processOmission(requirements);
-    const { budget, timeFrame, desires } = requirements;
-
-    if (budget) {
-      if (
-        favourableIndustry.includes(industry) &&
-        companySize > leadConfig.companySize.small
-      ) {
-        if (budget < leadConfig.budget.large) {
-          score += +requirementsWeights.budget * leadConfig.scores.base;
-          if (timeFrame > timeline.medium) {
-            score += +requirementsWeights.timeline * leadConfig.scores.standard;
-          } else {
-            score += +requirementsWeights.timeline * leadConfig.scores.boost;
-          }
-          if (desires.length > desireLength.medium) {
-            score += +requirementsWeights.desires * leadConfig.scores.standard;
-          } else {
-            score += +requirementsWeights.desires * leadConfig.scores.boost;
-          }
-        } else if (budget < leadConfig.budget.enterprise) {
-          score += +requirementsWeights.budget * leadConfig.scores.standard;
-          if (timeFrame > timeline.long) {
-            score += +requirementsWeights.timeline * leadConfig.scores.standard;
-          } else {
-            score += +requirementsWeights.timeline * leadConfig.scores.boost;
-          }
-          if (desires.length > desireLength.large) {
-            score += +requirementsWeights.desires * leadConfig.scores.standard;
-          } else {
-            score += +requirementsWeights.desires * leadConfig.scores.boost;
-          }
-        } else {
-          score += +requirementsWeights.budget * leadConfig.scores.max;
-          score += +requirementsWeights.timeline * leadConfig.scores.max;
-          score += +requirementsWeights.desires * leadConfig.scores.max;
-        }
-      } else {
-        if (budget < leadConfig.budget.small) {
-          score += +requirementsWeights.budget * leadConfig.scores.base;
-          if (timeFrame > timeline.short) {
-            score += +requirementsWeights.timeline * leadConfig.scores.standard;
-          } else {
-            score += +requirementsWeights.timeline * leadConfig.scores.boost;
-          }
-          if (desires.length > desireLength.small) {
-            score += +requirementsWeights.desires * leadConfig.scores.standard;
-          } else {
-            score += +requirementsWeights.desires * leadConfig.scores.boost;
-          }
-        } else if (budget < leadConfig.budget.medium) {
-          score += +requirementsWeights.budget * leadConfig.scores.standard;
-          if (timeFrame > timeline.medium) {
-            score += +requirementsWeights.timeline * leadConfig.scores.standard;
-          } else {
-            score += +requirementsWeights.timeline * leadConfig.scores.boost;
-          }
-          if (desires.length > desireLength.medium) {
-            score += +requirementsWeights.desires * leadConfig.scores.standard;
-          } else {
-            score += +requirementsWeights.desires * leadConfig.scores.boost;
-          }
-        } else {
-          score += +requirementsWeights.budget * leadConfig.scores.max;
-          score += +requirementsWeights.timeline * leadConfig.scores.max;
-          score += +requirementsWeights.desires * leadConfig.scores.max;
-        }
-      }
     }
 
     score -= forFeit;

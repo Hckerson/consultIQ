@@ -9,32 +9,19 @@ import {
 import { Type } from "class-transformer";
 import type { Specialization } from "../types/consultant.type";
 
-class ActiveInfluencer {
-  @IsString()
-  name: string;
+export class Lead {
+  @ValidateNested()
+  @Type(() => LeadBlocker)
+  blockers: LeadBlocker;
 
-  @IsString()
-  position: string;
-}
+  @ValidateNested()
+  @Type(() => LeadClientInfo)
+  clientInfo: LeadClientInfo;
 
-class StakeHolder {
-  @IsString()
-  name: string;
+  @ValidateNested()
+  @Type(() => LeadTermination)
+  termination: LeadTermination;
 
-  @IsString()
-  position: string;
-}
-
-class Authority {
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => ActiveInfluencer)
-  activeInfluencers: ActiveInfluencer[];
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => StakeHolder)
-  stakeHolders: StakeHolder[];
 }
 
 export class LeadBlocker {
@@ -72,42 +59,41 @@ export class LeadClientInfo {
   intelletualProperty: string;
 }
 
-export class LeadRequirements {
-  @IsNumber()
-  budget: number;
-
-  @IsNumber()
-  timeFrame: number;
-
-  @IsArray()
-  @IsString({ each: true })
-  desires: string[];
-}
 
 export class LeadTermination {
   @IsNumber()
   percentageRefund: number;
 }
 
-export class Lead {
-  @ValidateNested()
-  @Type(() => LeadBlocker)
-  blockers: LeadBlocker;
-
-  @ValidateNested()
-  @Type(() => LeadClientInfo)
-  clientInfo: LeadClientInfo;
-
-  @ValidateNested()
-  @Type(() => LeadTermination)
-  termination: LeadTermination;
-
-  @ValidateNested()
-  @Type(() => LeadRequirements)
-  requirements: LeadRequirements;
-}
-
 export class LeadResponse {
   @IsIn(["reject", "hold", "pursue", "priority-pursue"])
   decision: LeadDecision;
+}
+
+class ActiveInfluencer {
+  @IsString()
+  name: string;
+
+  @IsString()
+  position: string;
+}
+
+class StakeHolder {
+  @IsString()
+  name: string;
+
+  @IsString()
+  position: string;
+}
+
+class Authority {
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ActiveInfluencer)
+  activeInfluencers: ActiveInfluencer[];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => StakeHolder)
+  stakeHolders: StakeHolder[];
 }

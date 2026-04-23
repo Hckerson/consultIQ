@@ -26,12 +26,6 @@ const clientInfoWeights: Record<string, number> = {
   intelletualProperty: 0.15,
 };
 
-const requirementsWeights: Record<string, number> = {
-  budget: 0.4,
-  timeline: 0.3,
-  desires: 0.3,
-};
-
 const leadWeightsSum = Object.values(leadWeights).reduce((a, b) => a + b, 0);
 const sortedLeadweight = Object.fromEntries(
   Object.entries(leadWeights).sort((a, b) => a[1] - b[1]),
@@ -42,5 +36,4 @@ export {
   sortedLeadweight,
   clientInfoWeights,
   industryRelevance,
-  requirementsWeights,
 };
