@@ -6,12 +6,13 @@ import {
 import { Experience } from "src/common/interfaces/interface";
 import { ConsultantSpecialization } from "src/common/types/consultant.type";
 
-export function consultantNormalizer(
-  consultant: Consultant,
-): Pick<Consultant, "bookings" | "successRate" | "skillSet" | "qualification"> {
+export function consultantNormalizer(consultant: Consultant): Consultant {
+  const { successRate, skillSet, qualification, bookings, ...rest } =
+    consultant;
   return {
-    successRate: consultant.successRate || 0,
-    skillSet: consultant.skillSet
+    ...rest,
+    successRate: successRate || 0,
+    skillSet: skillSet
       .filter(
         (skill: ConsultantSkillSet) => skill.name.trim() && skill.level.trim(),
       )
@@ -22,8 +23,8 @@ export function consultantNormalizer(
         };
       }),
     qualification: {
-      specialization: consultant.qualification.specialization || {},
-      otherQualifications: consultant.qualification.otherQualifications
+      specialization: qualification.specialization || {},
+      otherQualifications: qualification.otherQualifications
         .filter(
           (q: Experience<ConsultantSpecialization>) =>
             q.title.trim() && q.years,
@@ -36,7 +37,7 @@ export function consultantNormalizer(
           };
         }),
     },
-    bookings: consultant.bookings
+    bookings: bookings
       .filter((booking: ConsultantBooking) => booking.status === "confirmed")
       .map((booking: ConsultantBooking) => {
         return {

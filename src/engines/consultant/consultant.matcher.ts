@@ -6,13 +6,5 @@ import { Lead } from "src/common/interfaces/lead.interface";
 export class ConsultantMatchingEngine {
   constructor() {}
 
-  matchConsultant(
-    consultant: Pick<
-      Consultant,
-      "bookings" | "successRate" | "skillSet" | "qualification"
-    >,
-    lead: Lead,
-  ) {
-    
-  }
+  matchConsultant(consultant: Consultant, lead: Lead) {}
 }
