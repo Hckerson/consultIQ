@@ -6,5 +6,7 @@ import { Lead } from "src/common/interfaces/lead.interface";
 export class ConsultantMatchingEngine {
   constructor() {}
 
-  matchConsultant(consultant: Consultant, lead: Lead) {}
+  matchConsultant(consultant: Consultant, lead: Lead) {
+    console.log(consultant, lead);
+  }
 }
