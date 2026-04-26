@@ -8,6 +8,7 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { Module, ValidationPipe } from "@nestjs/common";
 import { HealthModule } from "./modules/health/health.module";
 import { LeadsModule } from "./modules/core/leads/leads.module";
+import { PrismaModule } from "./services/database/prisma.module";
 import { HttpExceptionFilter } from "./common/filters/http-exception-filter";
 
 @Module({
@@ -25,10 +26,11 @@ import { HttpExceptionFilter } from "./common/filters/http-exception-filter";
   controllers: [AppController],
   imports: [
     AuthModule,
-    HealthModule,
     AuthModule,
     LeadsModule,
     EngineModule,
+    HealthModule,
+    PrismaModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [appConfig],
