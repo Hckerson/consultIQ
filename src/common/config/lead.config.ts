@@ -1,3 +1,4 @@
+
 export const leadConfig = {
   riskThresholds: {
     low: 50,
@@ -25,3 +26,4 @@ export const leadConfig = {
     high: 25,
   },
 };
+

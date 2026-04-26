@@ -1,4 +1,8 @@
 import * as z from "zod";
+import { registerAs } from "@nestjs/config";
+import { InternalServerErrorException } from "@nestjs/common";
+
+
 const envSchema = z.object({
   PORT: z.number().default(3000),
   NODE_ENV: z
@@ -14,7 +18,7 @@ if (!result.success) {
     "=======   Missing vars   ======= \n",
     result.error.issues.map((issue) => issue.message).join("\n"),
   );
-  throw new Error("Invalid environment variables");
+  throw new InternalServerErrorException("Invalid environment variables");
 }
 
 export const appConfig = {
@@ -24,4 +28,8 @@ export const appConfig = {
   isProduction: result.data.NODE_ENV === "production",
 };
 
-export type Config = typeof appConfig;
+export default registerAs("app", () => ({
+  ...appConfig,
+}));
+
+export type AppConfig = typeof appConfig;

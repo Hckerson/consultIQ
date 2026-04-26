@@ -1,4 +1,2 @@
 
-export const consultantConfig = {
-  
-}
+export const consultantConfig = {};
