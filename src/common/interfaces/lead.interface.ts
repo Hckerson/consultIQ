@@ -9,19 +9,16 @@ import {
 import { Type } from "class-transformer";
 import type { Specialization } from "../types/consultant.type";
 
-export class Lead {
-  @ValidateNested()
-  @Type(() => LeadBlocker)
-  blockers: LeadBlocker;
-
-  @ValidateNested()
-  @Type(() => LeadClientInfo)
-  clientInfo: LeadClientInfo;
-
-  @ValidateNested()
-  @Type(() => LeadTermination)
-  termination: LeadTermination;
-
+class Authority {
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ActiveInfluencer)
+  activeInfluencers: ActiveInfluencer[];
+  
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => StakeHolder)
+  stakeHolders: StakeHolder[];
 }
 
 export class LeadBlocker {
@@ -81,19 +78,23 @@ class ActiveInfluencer {
 class StakeHolder {
   @IsString()
   name: string;
-
+  
   @IsString()
   position: string;
 }
 
-class Authority {
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => ActiveInfluencer)
-  activeInfluencers: ActiveInfluencer[];
 
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => StakeHolder)
-  stakeHolders: StakeHolder[];
+export class Lead {
+  @ValidateNested()
+  @Type(() => LeadBlocker)
+  blockers: LeadBlocker;
+
+  @ValidateNested()
+  @Type(() => LeadClientInfo)
+  clientInfo: LeadClientInfo;
+
+  @ValidateNested()
+  @Type(() => LeadTermination)
+  termination: LeadTermination;
+
 }

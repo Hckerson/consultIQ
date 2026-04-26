@@ -34,13 +34,6 @@ export default function LeadNormalizer(lead: Lead): Lead {
           })),
       },
     },
-    requirements: {
-      budget: lead.requirements.budget || 0,
-      timeFrame: lead.requirements.timeFrame || 0,
-      desires: lead.requirements.desires
-        .filter((desire) => desire.trim())
-        .map((desire) => desire),
-    },
     termination: {
       percentageRefund: lead.termination.percentageRefund || 0,
     },
