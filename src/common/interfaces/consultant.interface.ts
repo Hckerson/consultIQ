@@ -5,25 +5,6 @@ import type { ConsultantSpecialization } from "../types/consultant.type";
 import { IsNumber, IsArray, ValidateNested, IsIn } from "class-validator";
 import { Type } from "class-transformer";
 
-export class Consultant extends BaseUser {
-  @IsNumber()
-  successRate: number;
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => ConsultantSkillSet)
-  skillSet: ConsultantSkillSet[];
-
-  @ValidateNested()
-  @Type(() => ConsultantExperience)
-  qualification: ConsultantExperience;
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => ConsultantBooking)
-  bookings: ConsultantBooking[];
-}
-
 export class ConsultantExperience {
   @ValidateNested()
   @Type(() => Experience)
@@ -52,3 +33,22 @@ export class ConsultantSkillSet {
 }
 
 export class ConsultantBooking extends BaseBooking {}
+
+export class Consultant extends BaseUser {
+  @IsNumber()
+  successRate: number;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ConsultantSkillSet)
+  skillSet: ConsultantSkillSet[];
+
+  @ValidateNested()
+  @Type(() => ConsultantExperience)
+  qualification: ConsultantExperience;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ConsultantBooking)
+  bookings: ConsultantBooking[];
+}

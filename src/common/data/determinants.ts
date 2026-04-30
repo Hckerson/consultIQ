@@ -1,3 +1,5 @@
+import type { SkillSet } from "../types/types";
+
 const favourableLocation = ["USA", "UK", "Canada", "Australia", "New Zealand"];
 const unfavourableLocation = [
   "India",
@@ -25,16 +27,7 @@ const unfavourableIndustry = [
   "Retail",
 ];
 
-const blockerRelatedKeywords = [
-  "time",
-  "urgency",
-  "location",
-  "industry",
-  "situation",
-  "companySize",
-  "leadership",
-  ,
-];
+
 
 const timeline = {
   short: 3,
@@ -48,11 +41,42 @@ const desireLength = {
   large: 9,
 };
 
+const skillSetKeywords: Record<SkillSet, string[]> = {
+  "Problem Solving": [
+    "analytical", "critical thinking", "troubleshooting", "innovation", "creativity", 
+    "situation", "risk", "security", "scope", "technology", "infrastructure"
+  ],
+  "Communication": [
+    "verbal", "written", "presentation", "negotiation", "listening", 
+    "communication", "alignment", "stakeholders"
+  ],
+  "Teamwork": [
+    "collaboration", "cooperation", "support", "conflict resolution", "interpersonal", 
+    "culture", "bandwidth"
+  ],
+  "Leadership": [
+    "management", "mentoring", "strategic", "decision making", "delegation", 
+    "leadership", "companySize", "resources", "budget", "cost", "approval"
+  ],
+  "Adaptability": [
+    "flexibility", "resilience", "change management", "agile", "versatile", 
+    "experience", "market", "industry", "location"
+  ],
+  "Time Management": [
+    "organization", "planning", "prioritization", "efficiency", "punctuality", 
+    "time", "urgency"
+  ],
+  "Other": [
+    "compliance", "regulatory", "legal"
+  ]
+};
+
 export {
   timeline,
   desireLength,
-  favourableIndustry,
+  skillSetKeywords,
   favourableLocation,
+  favourableIndustry,
   unfavourableIndustry,
   unfavourableLocation,
 };

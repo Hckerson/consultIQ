@@ -34,7 +34,11 @@ model User {
 }
 
 model Consultant {
-  id     String @id @unique @default(cuid())
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @unique
+  id            String @id @unique @default(cuid())
+  user          User   @relation(fields: [userId], references: [id])
+  userId        String @unique
+  successRate   Int
+  skillSet      Json
+  qualification Json
+  bookings      Json
 }
