@@ -15,6 +15,7 @@ const favourableIndustry = [
   "Manufacturing",
   "Retail",
 ];
+
 const unfavourableIndustry = [
   "Technology",
   "Healthcare",
@@ -22,6 +23,17 @@ const unfavourableIndustry = [
   "Education",
   "Manufacturing",
   "Retail",
+];
+
+const blockerRelatedKeywords = [
+  "time",
+  "urgency",
+  "location",
+  "industry",
+  "situation",
+  "companySize",
+  "leadership",
+  ,
 ];
 
 const timeline = {

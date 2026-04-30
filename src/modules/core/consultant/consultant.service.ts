@@ -18,7 +18,6 @@ export class ConsultantService {
       normalizedConsultant,
       lead,
     );
-
     return matchedConsultant;
   }
 

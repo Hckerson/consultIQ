@@ -2,9 +2,8 @@ import * as z from "zod";
 import { registerAs } from "@nestjs/config";
 import { InternalServerErrorException } from "@nestjs/common";
 
-
 const envSchema = z.object({
-  PORT: z.number().default(3000),
+  PORT: z.coerce.number().default(3000),
   NODE_ENV: z
     .enum(["development", "production", "test"])
     .default("development"),
