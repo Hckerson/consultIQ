@@ -3,6 +3,11 @@ import { SkillSet } from "@/common/types/types";
 import { skillSetKeywords } from "@/common/data/determinants";
 import { PrismaService } from "@/services/database/prisma.service";
 import { Lead, LeadBlocker } from "src/common/interfaces/lead.interface";
+import { idealConsultantSuccessRate } from "@/common/data/weights";
+import {
+  Consultant,
+  ConsultantExperience,
+} from "@/common/interfaces/consultant.interface";
 
 @Injectable()
 export class ConsultantMatchingEngine {
@@ -36,15 +41,58 @@ export class ConsultantMatchingEngine {
 
     const requiredSkillSets = this.extractRequiredSkillSets(blockers);
 
-    const availableConsultants = await this.prisma.consultant.findMany({
+    const foundConsultants = await this.prisma.consultant.findMany({
       where: {
-        
+        AND: [
+          {
+            successRate: {
+              gte: idealConsultantSuccessRate * 100,
+            },
+          },
+          {
+            OR: [
+              {
+                qualification: {
+                  path: ["specialization", "title"],
+                  equals: requiredSkillSets,
+                  mode: "insensitive",
+                },
+              },
+              {
+                qualification: {
+                  path: ["otherQualifications"],
+                  array_contains: [{ title: requiredSkillSets }],
+                },
+              },
+            ],
+          },
+        ],
+      },
+      include: {
+        user: true,
       },
     });
 
+    const finalMatch = [];
+
+    // check  later for time constraints
+    const bestMatch = foundConsultants.filter((consultant) => {
+      const c = consultant.qualification as unknown as ConsultantExperience;
+      return c.specialization.title === clientInfo.industry;
+    });
+
+    finalMatch.push(bestMatch);
+    if (bestMatch.length < 1 || bestMatch.length === 0) {
+      const alternatives = foundConsultants.filter((consultant) => {
+        const c = consultant.qualification as unknown as ConsultantExperience;
+        return c.specialization.title === clientInfo.industry;
+      });
+      finalMatch.push(alternatives);
+    }
+    
     return {
       requiredSkillSets,
-      availableConsultants,
+      finalMatch,
     };
   }
 }

@@ -38,7 +38,7 @@ model Consultant {
   user          User   @relation(fields: [userId], references: [id])
   userId        String @unique
   successRate   Int
-  skillSet      Json
+  skillSet      Json[]
   qualification Json
-  bookings      Json
+  bookings      Json[]
 }

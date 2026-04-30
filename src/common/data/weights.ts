@@ -31,9 +31,12 @@ const sortedLeadweight = Object.fromEntries(
   Object.entries(leadWeights).sort((a, b) => a[1] - b[1]),
 );
 
+const idealConsultantSuccessRate = 0.7;
+
 export {
   leadWeightsSum,
   sortedLeadweight,
   clientInfoWeights,
   industryRelevance,
+  idealConsultantSuccessRate,
 };
