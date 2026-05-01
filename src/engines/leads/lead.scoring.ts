@@ -59,6 +59,7 @@ export class LeadScoringEngine {
 
   protected processBlockers(blockers: LeadBlocker): number {
     // this would be done using ai
+    // or admin view and decide
     let score: number = 0;
 
     const forfeit = this.processOmission(blockers);

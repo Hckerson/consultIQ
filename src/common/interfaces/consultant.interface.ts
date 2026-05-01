@@ -1,9 +1,9 @@
-import { BaseBooking, BaseUser } from "./base.interface";
 import { Experience } from "./interface";
+import { Type } from "class-transformer";
+import { BaseBooking, BaseUser } from "./base.interface";
 import type { SkillLevel, SkillSet } from "../types/types";
 import type { ConsultantSpecialization } from "../types/consultant.type";
 import { IsNumber, IsArray, ValidateNested, IsIn } from "class-validator";
-import { Type } from "class-transformer";
 
 export class ConsultantExperience {
   @ValidateNested()

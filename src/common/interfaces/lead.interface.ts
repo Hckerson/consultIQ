@@ -5,6 +5,7 @@ import {
   IsArray,
   ValidateNested,
   IsIn,
+  IsBoolean,
 } from "class-validator";
 import { Type } from "class-transformer";
 import type { Specialization } from "../types/consultant.type";
@@ -14,7 +15,7 @@ class Authority {
   @ValidateNested({ each: true })
   @Type(() => ActiveInfluencer)
   activeInfluencers: ActiveInfluencer[];
-  
+
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => StakeHolder)
@@ -32,11 +33,10 @@ class ActiveInfluencer {
 class StakeHolder {
   @IsString()
   name: string;
-  
+
   @IsString()
   position: string;
 }
-
 
 export class LeadBlocker {
   @IsArray()
@@ -69,16 +69,14 @@ export class LeadClientInfo {
   @Type(() => Authority)
   authority: Authority;
 
-  @IsString()
-  intelletualProperty: string;
+  @IsBoolean()
+  intelletualProperty: boolean;
 }
-
 
 export class LeadTermination {
   @IsNumber()
   percentageRefund: number;
 }
-
 
 export class LeadResponse {
   @IsIn(["reject", "hold", "pursue", "priority-pursue"])
@@ -97,5 +95,4 @@ export class Lead {
   @ValidateNested()
   @Type(() => LeadTermination)
   termination: LeadTermination;
-
 }

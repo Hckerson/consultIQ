@@ -75,6 +75,10 @@ model ConsultantSkillSet {
   consultantId String
 }
 
+model Contract {
+  id String @id @unique @default(cuid())
+}
+
 model Experience {
   id                 String                @id @unique @default(cuid())
   title              String
@@ -84,6 +88,13 @@ model Experience {
   specializationOfId String                @unique
   otherOf            ConsultantExperience? @relation("OtherQualifications", fields: [otherOfId], references: [id])
   otherOfId          String?
+}
+
+model Lead {
+  id          String @id @unique @default(cuid())
+  blockers    Json
+  clientInfo  Json
+  termination Json
 }
 
 model User {

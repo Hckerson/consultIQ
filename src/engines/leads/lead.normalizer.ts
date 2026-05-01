@@ -18,7 +18,7 @@ export default function LeadNormalizer(lead: Lead): Lead {
       industry: lead.clientInfo.industry,
       companySize: lead.clientInfo.companySize || 0,
       niche: lead.clientInfo.niche.trim() || "",
-      intelletualProperty: lead.clientInfo.intelletualProperty.trim() || "",
+      intelletualProperty: lead.clientInfo.intelletualProperty || false,
       authority: {
         activeInfluencers: lead.clientInfo.authority.activeInfluencers
           .filter((influencer) => influencer.name.trim())
