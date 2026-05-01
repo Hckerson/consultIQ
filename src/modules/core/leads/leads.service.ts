@@ -36,4 +36,8 @@ export class LeadsService {
     };
     return this.leadRepo.createLead(payload);
   }
+
+  fetchUnprocessedLeads() {
+    return this.leadRepo.leads({ where: { processed: false } });
+  }
 }

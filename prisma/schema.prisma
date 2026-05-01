@@ -103,6 +103,7 @@ model Lead {
   clientInfo  Json
   termination Json
   score       Int
+  processed   Boolean     @default(false)
   status      LeadStatus?
 }
 

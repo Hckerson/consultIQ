@@ -6,6 +6,7 @@ import { LeadScoringEngine } from "src/engines/leads/lead.scoring";
 
 @Module({
   imports: [RepoModule],
+  exports: [LeadsService],
   controllers: [LeadsController],
   providers: [LeadsService, LeadScoringEngine],
 })
