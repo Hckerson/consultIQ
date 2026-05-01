@@ -1,6 +1,7 @@
 import { LeadsService } from "./leads.service";
 import { Lead } from "src/common/interfaces/lead.interface";
 import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import type { AllLeadsQueryDto } from "@/common/repos/query.dto";
 
 @Controller("leads")
 export class LeadsController {
@@ -12,13 +13,12 @@ export class LeadsController {
   }
 
   @Get("all")
-  fetchAllLead() {
-    return this.leadsService.fetchAllLead();
+  fetchAllLead(@Body() params: AllLeadsQueryDto) {
+    return this.leadsService.fetchAllLead(params);
   }
 
   @Get(":id")
   fetchLeadById(@Param("id") id: string) {
     return this.leadsService.fetchLeadById(id);
   }
-
 }

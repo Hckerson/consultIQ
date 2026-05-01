@@ -1,15 +1,19 @@
+import { User } from "generated/prisma/client.js";
 import { RepositoryError } from "../errors/repo.error";
 import { HttpStatus, Injectable } from "@nestjs/common";
-import { Prisma, User } from "generated/prisma/client.js";
 import { PrismaService } from "src/services/database/prisma.service";
+import {
+  AllUsersQueryDto,
+  CreateUserDto,
+  SingleUserQueryDto,
+  UpdateUserDto,
+} from "./query.dto";
 
 @Injectable()
 export class UserRepo {
   constructor(private prisma: PrismaService) {}
 
-  async user(
-    userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-  ): Promise<User | null> {
+  async user(userWhereUniqueInput: SingleUserQueryDto): Promise<User | null> {
     try {
       return await this.prisma.user.findUnique({
         where: userWhereUniqueInput,
@@ -23,13 +27,7 @@ export class UserRepo {
     }
   }
 
-  async users(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.UserWhereUniqueInput;
-    where?: Prisma.UserWhereInput;
-    orderBy?: Prisma.UserOrderByWithRelationInput;
-  }): Promise<User[]> {
+  async users(params: AllUsersQueryDto): Promise<User[]> {
     const { skip, take, cursor, where, orderBy } = params;
     try {
       return await this.prisma.user.findMany({
@@ -48,7 +46,7 @@ export class UserRepo {
     }
   }
 
-  async createUser(data: Prisma.UserCreateInput): Promise<User> {
+  async createUser(data: CreateUserDto): Promise<User> {
     try {
       return await this.prisma.user.create({
         data,
@@ -62,10 +60,7 @@ export class UserRepo {
     }
   }
 
-  async updateUser(params: {
-    where: Prisma.UserWhereUniqueInput;
-    data: Prisma.UserUpdateInput;
-  }): Promise<User> {
+  async updateUser(params: UpdateUserDto): Promise<User> {
     const { where, data } = params;
     try {
       return await this.prisma.user.update({
@@ -81,7 +76,7 @@ export class UserRepo {
     }
   }
 
-  async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
+  async deleteUser(where: SingleUserQueryDto): Promise<User> {
     try {
       return await this.prisma.user.delete({
         where,

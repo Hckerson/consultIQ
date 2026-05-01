@@ -1,15 +1,20 @@
-import { HttpStatus, Injectable } from "@nestjs/common";
-import { Prisma, Lead } from "generated/prisma/client.js";
-import { PrismaService } from "src/services/database/prisma.service";
+import { Lead } from "generated/prisma/client.js";
 import { RepositoryError } from "../errors/repo.error";
+import { HttpStatus, Injectable } from "@nestjs/common";
+import { PrismaService } from "src/services/database/prisma.service";
+
+import {
+  AllLeadsQueryDto,
+  CreateLeadDto,
+  SingleLeadQueryDto,
+  UpdateLeadDto,
+} from "./query.dto";
 
 @Injectable()
 export class LeadRepo {
   constructor(private prisma: PrismaService) {}
 
-  async lead(
-    LeadWhereUniqueInput: Prisma.LeadWhereUniqueInput,
-  ): Promise<Lead | null> {
+  async lead(LeadWhereUniqueInput: SingleLeadQueryDto): Promise<Lead | null> {
     try {
       return await this.prisma.lead.findUnique({
         where: LeadWhereUniqueInput,
@@ -23,13 +28,7 @@ export class LeadRepo {
     }
   }
 
-  async leads(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.LeadWhereUniqueInput;
-    where?: Prisma.LeadWhereInput;
-    orderBy?: Prisma.LeadOrderByWithRelationInput;
-  }): Promise<Lead[]> {
+  async leads(params: AllLeadsQueryDto): Promise<Lead[]> {
     const { skip, take, cursor, where, orderBy } = params;
     try {
       return await this.prisma.lead.findMany({
@@ -48,7 +47,7 @@ export class LeadRepo {
     }
   }
 
-  async createLead(data: Prisma.LeadCreateInput): Promise<Lead> {
+  async createLead(data: CreateLeadDto): Promise<Lead> {
     try {
       return await this.prisma.lead.create({
         data,
@@ -62,10 +61,7 @@ export class LeadRepo {
     }
   }
 
-  async updateLead(params: {
-    where: Prisma.LeadWhereUniqueInput;
-    data: Prisma.LeadUpdateInput;
-  }): Promise<Lead> {
+  async updateLead(params: UpdateLeadDto): Promise<Lead> {
     const { where, data } = params;
     try {
       return await this.prisma.lead.update({
@@ -81,7 +77,7 @@ export class LeadRepo {
     }
   }
 
-  async deleteLead(where: Prisma.LeadWhereUniqueInput): Promise<Lead> {
+  async deleteLead(where: SingleLeadQueryDto): Promise<Lead> {
     try {
       return await this.prisma.lead.delete({
         where,
