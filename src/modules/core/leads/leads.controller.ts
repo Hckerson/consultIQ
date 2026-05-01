@@ -7,18 +7,18 @@ import type { AllLeadsQueryDto } from "@/common/repos/query.dto";
 export class LeadsController {
   constructor(private readonly leadsService: LeadsService) {}
 
-  @Post()
+  @Post("process")
   processLead(@Body() lead: Lead) {
     return this.leadsService.processLead(lead);
   }
 
   @Get("all")
-  fetchAllLead(@Body() params: AllLeadsQueryDto) {
-    return this.leadsService.fetchAllLead(params);
+  async fetchAllLead(@Body() params: AllLeadsQueryDto) {
+    return await this.leadsService.fetchAllLead(params);
   }
 
   @Get(":id")
-  fetchLeadById(@Param("id") id: string) {
-    return this.leadsService.fetchLeadById(id);
+  async fetchLeadById(@Param("id") id: string) {
+    return await this.leadsService.fetchLeadById(id);
   }
 }

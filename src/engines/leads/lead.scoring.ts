@@ -1,6 +1,5 @@
 import { logger } from "src/lib/logger";
 import { Injectable } from "@nestjs/common";
-import { RiskLevel } from "src/common/types/lead.type";
 import { Lead } from "src/common/interfaces/lead.interface";
 import { leadConfig } from "../../common/config/lead.config";
 
@@ -21,7 +20,7 @@ import {
 export class LeadScoringEngine {
   constructor() {}
 
-  processLead(lead: Lead): RiskLevel {
+  processLead(lead: Lead) {
     let leadScore: number = 0;
 
     try {
@@ -31,14 +30,10 @@ export class LeadScoringEngine {
       leadScore += this.processTermination(termination);
     } catch (error) {
       logger.log("Error processing lead", error);
-      return "low";
+      return 0;
     }
 
-    return leadScore < leadConfig.riskThresholds.low
-      ? "low"
-      : leadScore < leadConfig.riskThresholds.medium
-        ? "medium"
-        : "high";
+    return leadScore;
   }
 
   protected processOmission(

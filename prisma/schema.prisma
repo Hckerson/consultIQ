@@ -95,6 +95,7 @@ model Lead {
   blockers    Json
   clientInfo  Json
   termination Json
+  score       Int
 }
 
 model User {

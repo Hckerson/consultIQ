@@ -3,7 +3,7 @@ import { LeadRepo } from "@/common/repos/lead.repo";
 import { Lead } from "src/common/interfaces/lead.interface";
 import LeadNormalizer from "src/engines/leads/lead.normalizer";
 import { LeadScoringEngine } from "src/engines/leads/lead.scoring";
-import { AllLeadsQueryDto } from "@/common/repos/query.dto";
+import { AllLeadsQueryDto, CreateLeadDto } from "@/common/repos/query.dto";
 
 @Injectable()
 export class LeadsService {
@@ -23,5 +23,16 @@ export class LeadsService {
 
   fetchLeadById(id: string) {
     return this.leadRepo.lead({ id });
+  }
+
+  createLead(lead: Lead, score: number) {
+    const payload: CreateLeadDto = {
+      ...lead,
+      blockers: JSON.stringify(lead.blockers),
+      clientInfo: JSON.stringify(lead.clientInfo),
+      termination: JSON.stringify(lead.termination),
+      score,
+    };
+    return this.leadRepo.createLead(payload);
   }
 }
