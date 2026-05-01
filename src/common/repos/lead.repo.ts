@@ -1,6 +1,7 @@
-import { Injectable } from "@nestjs/common";
+import { HttpStatus, Injectable } from "@nestjs/common";
 import { Prisma, Lead } from "generated/prisma/client.js";
 import { PrismaService } from "src/services/database/prisma.service";
+import { RepositoryError } from "../errors/repo.error";
 
 @Injectable()
 export class LeadRepo {
@@ -9,10 +10,17 @@ export class LeadRepo {
   async lead(
     LeadWhereUniqueInput: Prisma.LeadWhereUniqueInput,
   ): Promise<Lead | null> {
-    const lead = await this.prisma.lead.findUnique({
-      where: LeadWhereUniqueInput,
-    });
-    return lead;
+    try {
+      return await this.prisma.lead.findUnique({
+        where: LeadWhereUniqueInput,
+      });
+    } catch (error) {
+      throw new RepositoryError(
+        `Failed to fetch lead with id ${LeadWhereUniqueInput.id}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        error,
+      );
+    }
   }
 
   async leads(params: {
@@ -23,19 +31,35 @@ export class LeadRepo {
     orderBy?: Prisma.LeadOrderByWithRelationInput;
   }): Promise<Lead[]> {
     const { skip, take, cursor, where, orderBy } = params;
-    return await this.prisma.lead.findMany({
-      skip,
-      take,
-      cursor,
-      where,
-      orderBy,
-    });
+    try {
+      return await this.prisma.lead.findMany({
+        skip,
+        take,
+        cursor,
+        where,
+        orderBy,
+      });
+    } catch (error) {
+      throw new RepositoryError(
+        "Failed to fetch leads",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        error,
+      );
+    }
   }
 
   async createLead(data: Prisma.LeadCreateInput): Promise<Lead> {
-    return await this.prisma.lead.create({
-      data,
-    });
+    try {
+      return await this.prisma.lead.create({
+        data,
+      });
+    } catch (error) {
+      throw new RepositoryError(
+        "Failed to create lead",
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        error,
+      );
+    }
   }
 
   async updateLead(params: {
@@ -43,15 +67,31 @@ export class LeadRepo {
     data: Prisma.LeadUpdateInput;
   }): Promise<Lead> {
     const { where, data } = params;
-    return await this.prisma.lead.update({
-      data,
-      where,
-    });
+    try {
+      return await this.prisma.lead.update({
+        data,
+        where,
+      });
+    } catch (error) {
+      throw new RepositoryError(
+        `Failed to update lead with id ${where.id}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        error,
+      );
+    }
   }
 
   async deleteLead(where: Prisma.LeadWhereUniqueInput): Promise<Lead> {
-    return await this.prisma.lead.delete({
-      where,
-    });
+    try {
+      return await this.prisma.lead.delete({
+        where,
+      });
+    } catch (error) {
+      throw new RepositoryError(
+        `Failed to delete lead with id ${where.id}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        error,
+      );
+    }
   }
 }

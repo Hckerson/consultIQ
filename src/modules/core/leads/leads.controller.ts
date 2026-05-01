@@ -20,4 +20,5 @@ export class LeadsController {
   fetchLeadById(@Param("id") id: string) {
     return this.leadsService.fetchLeadById(id);
   }
+
 }

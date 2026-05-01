@@ -12,7 +12,11 @@ export class LeadsService {
     return leadScore;
   }
 
-  fetchAllLead() {}
+  fetchAllLead() {
+    
+  }
 
-  fetchLeadById(id: string) {}
+  fetchLeadById(id: string) {
+
+  }
 }
