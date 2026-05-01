@@ -2,13 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { SkillSet } from "@/common/types/types";
 import { skillSetKeywords } from "@/common/data/determinants";
 import { PrismaService } from "@/services/database/prisma.service";
-import { Lead, LeadBlocker } from "src/common/interfaces/lead.interface";
 import { idealConsultantSuccessRate } from "@/common/data/weights";
-import {
-  Consultant,
-  ConsultantExperience,
-} from "@/common/interfaces/consultant.interface";
-
+import { Lead, LeadBlocker } from "src/common/interfaces/lead.interface";
 @Injectable()
 export class ConsultantMatchingEngine {
   constructor(private readonly prisma: PrismaService) {}
@@ -36,6 +31,7 @@ export class ConsultantMatchingEngine {
     return Array.from(requiredSkills);
   }
 
+  // check  later for time constraints
   async matchConsultant(lead: Lead) {
     const { clientInfo, blockers } = lead;
 
@@ -53,15 +49,18 @@ export class ConsultantMatchingEngine {
             OR: [
               {
                 qualification: {
-                  path: ["specialization", "title"],
-                  equals: requiredSkillSets,
-                  mode: "insensitive",
+                  specialization: {
+                    title: clientInfo.industry,
+                  },
                 },
               },
               {
                 qualification: {
-                  path: ["otherQualifications"],
-                  array_contains: [{ title: requiredSkillSets }],
+                  otherQualifications: {
+                    some: {
+                      title: clientInfo.industry,
+                    },
+                  },
                 },
               },
             ],
@@ -70,28 +69,47 @@ export class ConsultantMatchingEngine {
       },
       include: {
         user: true,
+        qualification: {
+          include: {
+            specialization: {
+              select: {
+                title: true,
+              },
+            },
+            otherQualifications: {
+              select: {
+                title: true,
+              },
+            },
+          },
+        },
+        skillSet: true,
+        bookings: true,
       },
     });
 
-    const finalMatch = [];
+    const subFinalMatch = [];
 
-    // check  later for time constraints
-    const bestMatch = foundConsultants.filter((consultant) => {
-      const c = consultant.qualification as unknown as ConsultantExperience;
-      return c.specialization.title === clientInfo.industry;
-    });
+    const bestMatch = foundConsultants.filter(
+      (consultant) => consultant.qualification?.specialization?.title,
+    );
 
-    finalMatch.push(bestMatch);
-    if (bestMatch.length < 1 || bestMatch.length === 0) {
-      const alternatives = foundConsultants.filter((consultant) => {
-        const c = consultant.qualification as unknown as ConsultantExperience;
-        return c.specialization.title === clientInfo.industry;
-      });
-      finalMatch.push(alternatives);
+    subFinalMatch.push(...bestMatch);
+
+    if (!subFinalMatch.length || subFinalMatch.length === 0) {
+      const alternatives = foundConsultants.filter(
+        (c) => !bestMatch.includes(c),
+      );
+      subFinalMatch.push(...alternatives);
     }
-    
+
+    const finalMatch = subFinalMatch.filter((f) =>
+      f.skillSet.some((s) => requiredSkillSets.includes(s.name)),
+    );
+
     return {
       requiredSkillSets,
+      subFinalMatch,
       finalMatch,
     };
   }

@@ -42,7 +42,7 @@ const desireLength = {
 };
 
 const skillSetKeywords: Record<SkillSet, string[]> = {
-  "Problem Solving": [
+  "Problem_Solving": [
     "analytical", "critical thinking", "troubleshooting", "innovation", "creativity", 
     "situation", "risk", "security", "scope", "technology", "infrastructure"
   ],
@@ -62,7 +62,7 @@ const skillSetKeywords: Record<SkillSet, string[]> = {
     "flexibility", "resilience", "change management", "agile", "versatile", 
     "experience", "market", "industry", "location"
   ],
-  "Time Management": [
+  "Time_Management": [
     "organization", "planning", "prioritization", "efficiency", "punctuality", 
     "time", "urgency"
   ],

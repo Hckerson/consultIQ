@@ -18,12 +18,12 @@ export class ConsultantExperience {
 
 export class ConsultantSkillSet {
   @IsIn([
-    "Problem Solving",
+    "Problem_Solving",
     "Communication",
     "Teamwork",
     "Leadership",
     "Adaptability",
-    "Time Management",
+    "Time_Management",
     "Other",
   ])
   name: SkillSet;

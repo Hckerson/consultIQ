@@ -13,6 +13,79 @@ datasource db {
   provider = "postgresql"
 }
 
+enum SkillLevel {
+  Beginner
+  Intermediate
+  Advanced
+  Expert
+}
+
+enum SkillSet {
+  Problem_Solving @map("Problem Solving")
+  Communication
+  Teamwork
+  Leadership
+  Adaptability
+  Time_Management @map("Time Management")
+  Other
+}
+
+enum Specialization {
+  Technology
+  Business
+  Finance
+  Marketing
+  Sales
+  Human_Resources @map("Human Resources")
+  Other
+}
+
+model Consultant {
+  id            String                @id @unique @default(cuid())
+  user          User                  @relation(fields: [userId], references: [id])
+  userId        String                @unique
+  successRate   Int
+  skillSet      ConsultantSkillSet[]
+  qualification ConsultantExperience?
+  bookings      ConsultantBooking[]
+}
+
+model ConsultantBooking {
+  id           String     @id @unique @default(cuid())
+  status       String
+  startDate    DateTime
+  endDate      DateTime
+  consultant   Consultant @relation(fields: [consultantId], references: [id])
+  consultantId String
+}
+
+model ConsultantExperience {
+  id                  String       @id @unique @default(cuid())
+  consultant          Consultant   @relation(fields: [consultantId], references: [id])
+  consultantId        String       @unique
+  specialization      Experience?  @relation("Specialization")
+  otherQualifications Experience[] @relation("OtherQualifications")
+}
+
+model ConsultantSkillSet {
+  id           String     @id @unique @default(cuid())
+  name         SkillSet
+  level        SkillLevel
+  consultant   Consultant @relation(fields: [consultantId], references: [id])
+  consultantId String
+}
+
+model Experience {
+  id                 String                @id @unique @default(cuid())
+  title              String
+  years              Int
+  niches             String[]
+  specializationOf   ConsultantExperience  @relation("Specialization", fields: [specializationOfId], references: [id])
+  specializationOfId String                @unique
+  otherOf            ConsultantExperience? @relation("OtherQualifications", fields: [otherOfId], references: [id])
+  otherOfId          String?
+}
+
 model User {
   id           String      @id @unique @default(cuid())
   firstName    String
@@ -24,21 +97,10 @@ model User {
   state        String?
   zip          String?
   country      String?
-  updatedAt    DateTime    @updatedAt()
+  consultantId String?
+  updatedAt    DateTime    @updatedAt
   createdAt    DateTime    @default(now())
   consultant   Consultant?
-  consultantId String?
 
-  @@unique([firstName, lastName], name: "fullName")
-  @@index([firstName, lastName])
-}
-
-model Consultant {
-  id            String @id @unique @default(cuid())
-  user          User   @relation(fields: [userId], references: [id])
-  userId        String @unique
-  successRate   Int
-  skillSet      Json[]
-  qualification Json
-  bookings      Json[]
+  @@index([id, email])
 }
