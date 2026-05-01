@@ -8,8 +8,8 @@ export class LeadsController {
   constructor(private readonly leadsService: LeadsService) {}
 
   @Post("process")
-  processLead(@Body() lead: Lead) {
-    return this.leadsService.processLead(lead);
+  async processLead(@Body() lead: Lead) {
+    return await this.leadsService.processLead(lead);
   }
 
   @Get("all")

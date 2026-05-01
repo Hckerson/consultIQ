@@ -11,9 +11,10 @@ export class LeadsService {
     private readonly leadRepo: LeadRepo,
     private readonly leadEngine: LeadScoringEngine,
   ) {}
-  processLead(lead: Lead) {
+  async processLead(lead: Lead) {
     const normalizedLeadInput = LeadNormalizer(lead);
     const leadScore = this.leadEngine.processLead(normalizedLeadInput);
+    await this.createLead(normalizedLeadInput, leadScore);
     return leadScore;
   }
 

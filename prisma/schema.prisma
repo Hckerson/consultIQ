@@ -13,6 +13,13 @@ datasource db {
   provider = "postgresql"
 }
 
+enum LeadStatus {
+  REJECT
+  HOLD
+  PURSUE
+  PRIORITY_PURSUE @map("Priority Pursue")
+}
+
 enum SkillLevel {
   Beginner
   Intermediate
@@ -91,11 +98,12 @@ model Experience {
 }
 
 model Lead {
-  id          String @id @unique @default(cuid())
+  id          String      @id @unique @default(cuid())
   blockers    Json
   clientInfo  Json
   termination Json
   score       Int
+  status      LeadStatus?
 }
 
 model User {
