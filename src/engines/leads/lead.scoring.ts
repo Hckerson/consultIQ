@@ -4,7 +4,7 @@ import { RiskLevel } from "src/common/types/lead.type";
 import { Lead } from "src/common/interfaces/lead.interface";
 import { leadConfig } from "../../common/config/lead.config";
 
-import { clientInfoWeights } from "src/common/data/weights";
+import { clientInfoWeights } from "@/common/data/weights.data";
 import {
   LeadBlocker,
   LeadClientInfo,
@@ -15,7 +15,7 @@ import {
   favourableLocation,
   unfavourableIndustry,
   unfavourableLocation,
-} from "src/common/data/determinants";
+} from "@/common/data/determinants.data";
 
 @Injectable()
 export class LeadScoringEngine {

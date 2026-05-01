@@ -11,4 +11,8 @@ export class LeadsService {
     const leadScore = this.leadEngine.processLead(normalizedLeadInput);
     return leadScore;
   }
+
+  fetchAllLead() {}
+
+  fetchLeadById(id: string) {}
 }
