@@ -21,6 +21,23 @@ class Authority {
   stakeHolders: StakeHolder[];
 }
 
+class ActiveInfluencer {
+  @IsString()
+  name: string;
+
+  @IsString()
+  position: string;
+}
+
+class StakeHolder {
+  @IsString()
+  name: string;
+  
+  @IsString()
+  position: string;
+}
+
+
 export class LeadBlocker {
   @IsArray()
   @IsString({ each: true })
@@ -62,27 +79,11 @@ export class LeadTermination {
   percentageRefund: number;
 }
 
+
 export class LeadResponse {
   @IsIn(["reject", "hold", "pursue", "priority-pursue"])
   decision: LeadDecision;
 }
-
-class ActiveInfluencer {
-  @IsString()
-  name: string;
-
-  @IsString()
-  position: string;
-}
-
-class StakeHolder {
-  @IsString()
-  name: string;
-  
-  @IsString()
-  position: string;
-}
-
 
 export class Lead {
   @ValidateNested()

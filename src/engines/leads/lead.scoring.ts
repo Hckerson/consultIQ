@@ -1,8 +1,8 @@
 import { logger } from "src/lib/logger";
-import { leadConfig } from "../../common/config/lead.config";
 import { Injectable } from "@nestjs/common";
 import { RiskLevel } from "src/common/types/lead.type";
 import { Lead } from "src/common/interfaces/lead.interface";
+import { leadConfig } from "../../common/config/lead.config";
 
 import { clientInfoWeights } from "src/common/data/weights";
 import {

@@ -4,6 +4,7 @@ import { skillSetKeywords } from "@/common/data/determinants";
 import { PrismaService } from "@/services/database/prisma.service";
 import { idealConsultantSuccessRate } from "@/common/data/weights";
 import { Lead, LeadBlocker } from "src/common/interfaces/lead.interface";
+
 @Injectable()
 export class ConsultantMatchingEngine {
   constructor(private readonly prisma: PrismaService) {}
