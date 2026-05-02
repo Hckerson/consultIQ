@@ -1,8 +1,7 @@
-
 export const leadConfig = {
   riskThresholds: {
-    low: 50,
-    medium: 75,
+    low: 25,
+    medium: 50,
   },
   omissionForfeit: 2,
   companySize: {
@@ -25,5 +24,9 @@ export const leadConfig = {
     low: 10,
     high: 25,
   },
+  priority: {
+    low: 1,
+    medium: 3,
+    high: 5,
+  },
 };
-

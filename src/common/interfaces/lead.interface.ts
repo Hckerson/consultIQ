@@ -63,6 +63,9 @@ export class LeadClientInfo {
   industry: Specialization;
 
   @IsString()
+  companyName: string;
+
+  @IsString()
   niche: string;
 
   @ValidateNested()

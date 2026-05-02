@@ -1,0 +1,4 @@
+
+leads below 20 will be shown to the admin as low priority, whicch will then show the discard option
+
+leads above 20 will be shown to the admin as high priority, which will then show the finalize option

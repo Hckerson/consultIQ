@@ -83,7 +83,8 @@ model ConsultantSkillSet {
 }
 
 model Contract {
-  id String @id @unique @default(cuid())
+  id          String @id @unique @default(cuid())
+  companyName String @unique
 }
 
 model Experience {

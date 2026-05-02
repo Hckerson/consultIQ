@@ -36,3 +36,22 @@ export interface UpdateUserDto {
 
 export type CreateLeadDto = Prisma.LeadCreateInput;
 export type SingleUserQueryDto = Prisma.UserWhereUniqueInput;
+
+//  ===== Contracts =====
+export interface AllContractsQueryDto {
+  skip?: number;
+  take?: number;
+  select?: Prisma.ContractSelect;
+  where?: Prisma.ContractWhereInput;
+  cursor?: Prisma.ContractWhereUniqueInput;
+  orderBy?: Prisma.ContractOrderByWithRelationInput;
+}
+export interface UpdateContractDto {
+  select?: Prisma.ContractSelect;
+  data: Prisma.ContractUpdateInput;
+  where: Prisma.ContractWhereUniqueInput;
+}
+
+export type CreateContractDto = Prisma.ContractCreateInput;
+export type CountContractQueryDto = Prisma.ContractWhereInput;
+export type SingleContractQueryDto = Prisma.ContractWhereUniqueInput;

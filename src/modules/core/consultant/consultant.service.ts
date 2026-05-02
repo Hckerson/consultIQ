@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { AppConfig } from "@/common/config/app.config";
 import { Lead } from "src/common/interfaces/lead.interface";
-import { Consultant } from "src/common/interfaces/consultant.interface";
 import { ConsultantMatchingEngine } from "src/engines/consultant/consultant.matcher";
 
 @Injectable()
