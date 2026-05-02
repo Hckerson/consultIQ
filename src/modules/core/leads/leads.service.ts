@@ -3,7 +3,7 @@ import { LeadRepo } from "@/common/repos/lead.repo";
 import { Lead } from "src/common/interfaces/lead.interface";
 import LeadNormalizer from "src/engines/leads/lead.normalizer";
 import { LeadScoringEngine } from "src/engines/leads/lead.scoring";
-import { AllLeadsQueryDto, CreateLeadDto } from "@/common/repos/query.dto";
+import { CreateLeadDto, AllLeadsQueryDto } from "@/common/repos/query.dto";
 
 @Injectable()
 export class LeadsService {
@@ -39,8 +39,28 @@ export class LeadsService {
 
   fetchUnprocessedLeads() {
     return this.leadRepo.leads({
-      where: { processed: false },
-      select: { blockers: true },
+      where: { processed: false, discarded: false },
+      select: { blockers: true, score: true },
+    });
+  }
+
+  updateLead(id: string, score: number) {
+    return this.leadRepo.updateLead({
+      where: { id },
+      data: { score, processed: true },
+    });
+  }
+
+  discardLead(id: string) {
+    return this.leadRepo.updateLead({
+      where: { id },
+      data: { discarded: true },
+    });
+  }
+
+  fetchDiscardedLeads() {
+    return this.leadRepo.leads({
+      where: { discarded: true },
     });
   }
 }

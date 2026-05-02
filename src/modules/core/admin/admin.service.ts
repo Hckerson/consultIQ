@@ -9,7 +9,15 @@ export class AdminService {
     return this.leadService.fetchUnprocessedLeads();
   }
 
-  finalizeLead(leadId: string){
-    return this.leadService.updateLead(leadId, {processed: true})
+  finalizeLead(leadId: string, newScore: number) {
+    return this.leadService.updateLead(leadId, newScore);
+  }
+
+  discardLead(leadId: string) {
+    return this.leadService.discardLead(leadId);
+  }
+
+  fetchDiscardedLeads() {
+    return this.leadService.fetchDiscardedLeads();
   }
 }

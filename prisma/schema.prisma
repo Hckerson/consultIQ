@@ -105,6 +105,7 @@ model Lead {
   score       Int
   processed   Boolean     @default(false)
   status      LeadStatus?
+  discarded   Boolean     @default(false)
 }
 
 model User {
