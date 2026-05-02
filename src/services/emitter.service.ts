@@ -16,11 +16,14 @@ export class EventService extends EventEmitter {
     });
   }
 
-  registerListeners(eventName: string, func: (...args: any[]) => void) {
+  registerListeners(
+    eventName: string,
+    func: (...args: any[]) => void | Promise<void>,
+  ) {
     this.on(eventName, (...args) => {
       logger.log(`Event ${eventName} triggered`, null);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      func(...args);
+      void func(...args);
     });
   }
 

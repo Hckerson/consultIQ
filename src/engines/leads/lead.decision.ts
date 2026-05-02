@@ -23,7 +23,7 @@ export class LeadDecisionEngine {
     });
   }
 
-  async decide(lead: Lead) {
+  async decide(lead: Lead): Promise<void> {
     const decision = await this.recalculate(lead);
     await this.leadRepo.updateLead({
       where: { id: lead.id },
