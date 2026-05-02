@@ -4,7 +4,9 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class LeadDecisionEngine {
-  constructor() {}
+  constructor() {
+    
+  }
 
   decide(): LeadDecision {
     const leadScore: number = 0;

@@ -4,11 +4,13 @@ import { Lead } from "src/common/interfaces/lead.interface";
 import LeadNormalizer from "src/engines/leads/lead.normalizer";
 import { LeadScoringEngine } from "src/engines/leads/lead.scoring";
 import { CreateLeadDto, AllLeadsQueryDto } from "@/common/repos/query.dto";
+import { EventService } from "@/services/emitter.service";
 
 @Injectable()
 export class LeadsService {
   constructor(
     private readonly leadRepo: LeadRepo,
+    private readonly emitter: EventService,
     private readonly leadEngine: LeadScoringEngine,
   ) {}
   async processLead(lead: Lead) {
@@ -44,11 +46,15 @@ export class LeadsService {
     });
   }
 
-  updateLead(id: string, score: number) {
-    return this.leadRepo.updateLead({
+  async adminLeadUpdate(id: string, score: number) {
+    const lead = await this.leadRepo.updateLead({
       where: { id },
       data: { score, processed: true },
     });
+    if (lead) {
+      this.emitter.registerNewEvent("LEAD_UPDATED", [lead]);
+    }
+    return lead;
   }
 
   discardLead(id: string) {

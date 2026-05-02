@@ -10,7 +10,7 @@ export class AdminService {
   }
 
   finalizeLead(leadId: string, newScore: number) {
-    return this.leadService.updateLead(leadId, newScore);
+    return this.leadService.adminLeadUpdate(leadId, newScore);
   }
 
   discardLead(leadId: string) {
