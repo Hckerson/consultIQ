@@ -134,7 +134,7 @@ export class LeadScoringEngine {
     } else if (percentageRefund < leadConfig.refundThresholds.high) {
       score += leadConfig.scores.boost;
     } else {
-      score += leadConfig.scores.standard;
+      score += leadConfig.scores.base;
     }
     score -= forFeit;
     return score;

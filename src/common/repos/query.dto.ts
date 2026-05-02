@@ -4,29 +4,35 @@ import { Prisma } from "generated/prisma/client";
 export interface AllLeadsQueryDto {
   skip?: number;
   take?: number;
-  cursor?: Prisma.LeadWhereUniqueInput;
+  select?: Prisma.LeadSelect;
   where?: Prisma.LeadWhereInput;
+  cursor?: Prisma.LeadWhereUniqueInput;
   orderBy?: Prisma.LeadOrderByWithRelationInput;
 }
 export interface UpdateLeadDto {
-  where: Prisma.LeadWhereUniqueInput;
+  select?: Prisma.LeadSelect;
   data: Prisma.LeadUpdateInput;
+  where: Prisma.LeadWhereUniqueInput;
 }
-export type SingleLeadQueryDto = Prisma.LeadWhereUniqueInput;
 export type CreateUserDto = Prisma.UserCreateInput;
+export type SingleLeadQueryDto = Prisma.LeadWhereUniqueInput;
 
 //  ===== Users =====
 export interface AllUsersQueryDto {
   skip?: number;
   take?: number;
-  cursor?: Prisma.UserWhereUniqueInput;
+  select?: Prisma.UserSelect;
+  include?: Prisma.UserInclude;
   where?: Prisma.UserWhereInput;
+  cursor?: Prisma.UserWhereUniqueInput;
   orderBy?: Prisma.UserOrderByWithRelationInput;
 }
 export interface UpdateUserDto {
-  where: Prisma.UserWhereUniqueInput;
+  select?: Prisma.UserSelect;
   data: Prisma.UserUpdateInput;
+  include?: Prisma.UserInclude;
+  where: Prisma.UserWhereUniqueInput;
 }
 
-export type SingleUserQueryDto = Prisma.UserWhereUniqueInput;
 export type CreateLeadDto = Prisma.LeadCreateInput;
+export type SingleUserQueryDto = Prisma.UserWhereUniqueInput;

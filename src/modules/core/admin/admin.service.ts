@@ -8,4 +8,8 @@ export class AdminService {
   fetchUnprocessedLeads() {
     return this.leadService.fetchUnprocessedLeads();
   }
+
+  finalizeLead(leadId: string){
+    return this.leadService.updateLead(leadId, {processed: true})
+  }
 }

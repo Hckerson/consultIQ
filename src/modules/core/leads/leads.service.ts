@@ -38,6 +38,9 @@ export class LeadsService {
   }
 
   fetchUnprocessedLeads() {
-    return this.leadRepo.leads({ where: { processed: false } });
+    return this.leadRepo.leads({
+      where: { processed: false },
+      select: { blockers: true },
+    });
   }
 }
