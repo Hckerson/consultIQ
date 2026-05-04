@@ -15,10 +15,10 @@ export type Month =
 export type SkillLevel = "Beginner" | "Intermediate" | "Advanced" | "Expert";
 
 export type SkillSet =
-  | "Problem Solving"
+  | "Problem_Solving"
   | "Communication"
   | "Teamwork"
   | "Leadership"
   | "Adaptability"
-  | "Time Management"
+  | "Time_Management"
   | "Other";

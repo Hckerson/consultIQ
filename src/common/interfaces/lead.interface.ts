@@ -5,23 +5,37 @@ import {
   IsArray,
   ValidateNested,
   IsIn,
+  IsBoolean,
 } from "class-validator";
 import { Type } from "class-transformer";
 import type { Specialization } from "../types/consultant.type";
 
-export class Lead {
-  @ValidateNested()
-  @Type(() => LeadBlocker)
-  blockers: LeadBlocker;
+class Authority {
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ActiveInfluencer)
+  activeInfluencers: ActiveInfluencer[];
 
-  @ValidateNested()
-  @Type(() => LeadClientInfo)
-  clientInfo: LeadClientInfo;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => StakeHolder)
+  stakeHolders: StakeHolder[];
+}
 
-  @ValidateNested()
-  @Type(() => LeadTermination)
-  termination: LeadTermination;
+class ActiveInfluencer {
+  @IsString()
+  name: string;
 
+  @IsString()
+  position: string;
+}
+
+class StakeHolder {
+  @IsString()
+  name: string;
+
+  @IsString()
+  position: string;
 }
 
 export class LeadBlocker {
@@ -49,16 +63,18 @@ export class LeadClientInfo {
   industry: Specialization;
 
   @IsString()
+  companyName: string;
+
+  @IsString()
   niche: string;
 
   @ValidateNested()
   @Type(() => Authority)
   authority: Authority;
 
-  @IsString()
-  intelletualProperty: string;
+  @IsBoolean()
+  intelletualProperty: boolean;
 }
-
 
 export class LeadTermination {
   @IsNumber()
@@ -70,30 +86,16 @@ export class LeadResponse {
   decision: LeadDecision;
 }
 
-class ActiveInfluencer {
-  @IsString()
-  name: string;
+export class Lead {
+  @ValidateNested()
+  @Type(() => LeadBlocker)
+  blockers: LeadBlocker;
 
-  @IsString()
-  position: string;
-}
+  @ValidateNested()
+  @Type(() => LeadClientInfo)
+  clientInfo: LeadClientInfo;
 
-class StakeHolder {
-  @IsString()
-  name: string;
-
-  @IsString()
-  position: string;
-}
-
-class Authority {
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => ActiveInfluencer)
-  activeInfluencers: ActiveInfluencer[];
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => StakeHolder)
-  stakeHolders: StakeHolder[];
+  @ValidateNested()
+  @Type(() => LeadTermination)
+  termination: LeadTermination;
 }

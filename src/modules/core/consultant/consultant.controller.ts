@@ -5,10 +5,6 @@ import { ConsultantService } from "./consultant.service";
 export class ConsultantController {
   constructor(private readonly consultantService: ConsultantService) {}
 
-  @Get()
-  findAll() {
-    return this.consultantService.findAll();
-  }
 
   @Get(":id")
   findOne(@Param("id") id: string) {

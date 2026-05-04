@@ -1,19 +1,17 @@
 import { Injectable } from "@nestjs/common";
-import { Consultant } from "src/common/interfaces/consultant.interface";
+import { ConfigService } from "@nestjs/config";
+import { AppConfig } from "@/common/config/app.config";
 import { Lead } from "src/common/interfaces/lead.interface";
 import { ConsultantMatchingEngine } from "src/engines/consultant/consultant.matcher";
-import { consultantNormalizer } from "src/engines/consultant/consultant.normalizer";
 
 @Injectable()
 export class ConsultantService {
-  constructor(private readonly matchEngine: ConsultantMatchingEngine) {}
-  matchConsultant(consultant: Consultant, lead: Lead) {
-    const normalizedConsultant = consultantNormalizer(consultant);
-    const matchedConsultant = this.matchEngine.matchConsultant(
-      normalizedConsultant,
-      lead,
-    );
-
+  constructor(
+    private readonly matchEngine: ConsultantMatchingEngine,
+    private configService: ConfigService<AppConfig>,
+  ) {}
+  matchConsultant(lead: Lead) {
+    const matchedConsultant = this.matchEngine.matchConsultant(lead);
     return matchedConsultant;
   }
 

@@ -1,10 +1,9 @@
 import { logger } from "src/lib/logger";
-import { leadConfig } from "../../common/config/lead.config";
 import { Injectable } from "@nestjs/common";
-import { RiskLevel } from "src/common/types/lead.type";
 import { Lead } from "src/common/interfaces/lead.interface";
+import { leadConfig } from "../../common/config/lead.config";
 
-import { clientInfoWeights } from "src/common/data/weights";
+import { clientInfoWeights } from "@/common/data/weights.data";
 import {
   LeadBlocker,
   LeadClientInfo,
@@ -15,13 +14,13 @@ import {
   favourableLocation,
   unfavourableIndustry,
   unfavourableLocation,
-} from "src/common/data/determinants";
+} from "@/common/data/determinants.data";
 
 @Injectable()
 export class LeadScoringEngine {
   constructor() {}
 
-  processLead(lead: Lead): RiskLevel {
+  processLead(lead: Lead) {
     let leadScore: number = 0;
 
     try {
@@ -31,14 +30,10 @@ export class LeadScoringEngine {
       leadScore += this.processTermination(termination);
     } catch (error) {
       logger.log("Error processing lead", error);
-      return "low";
+      return 0;
     }
 
-    return leadScore < leadConfig.riskThresholds.low
-      ? "low"
-      : leadScore < leadConfig.riskThresholds.medium
-        ? "medium"
-        : "high";
+    return leadScore;
   }
 
   protected processOmission(
@@ -59,6 +54,7 @@ export class LeadScoringEngine {
 
   protected processBlockers(blockers: LeadBlocker): number {
     // this would be done using ai
+    // or admin view and decide
     let score: number = 0;
 
     const forfeit = this.processOmission(blockers);
@@ -138,7 +134,7 @@ export class LeadScoringEngine {
     } else if (percentageRefund < leadConfig.refundThresholds.high) {
       score += leadConfig.scores.boost;
     } else {
-      score += leadConfig.scores.standard;
+      score += leadConfig.scores.base;
     }
     score -= forFeit;
     return score;

@@ -16,9 +16,10 @@ export default function LeadNormalizer(lead: Lead): Lead {
     clientInfo: {
       location: lead.clientInfo.location.trim() || "",
       industry: lead.clientInfo.industry,
+      companyName: lead.clientInfo.companyName.trim() || "",
       companySize: lead.clientInfo.companySize || 0,
       niche: lead.clientInfo.niche.trim() || "",
-      intelletualProperty: lead.clientInfo.intelletualProperty.trim() || "",
+      intelletualProperty: lead.clientInfo.intelletualProperty || false,
       authority: {
         activeInfluencers: lead.clientInfo.authority.activeInfluencers
           .filter((influencer) => influencer.name.trim())
@@ -33,13 +34,6 @@ export default function LeadNormalizer(lead: Lead): Lead {
             position: stakeHolder.position.trim(),
           })),
       },
-    },
-    requirements: {
-      budget: lead.requirements.budget || 0,
-      timeFrame: lead.requirements.timeFrame || 0,
-      desires: lead.requirements.desires
-        .filter((desire) => desire.trim())
-        .map((desire) => desire),
     },
     termination: {
       percentageRefund: lead.termination.percentageRefund || 0,
