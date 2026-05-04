@@ -22,7 +22,6 @@ export class EventService extends EventEmitter {
   ) {
     this.on(eventName, (...args) => {
       logger.log(`Event ${eventName} triggered`, null);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       void func(...args);
     });
   }

@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { SkillSet } from "@/common/types/types";
 import { skillSetKeywords } from "@/common/data/determinants.data";
-import { PrismaService } from "@/services/database/prisma.service";
+import { PrismaService } from "@/common/services/database/prisma.service";
 import { idealConsultantSuccessRate } from "@/common/data/weights.data";
 import { Lead, LeadBlocker } from "src/common/interfaces/lead.interface";
 

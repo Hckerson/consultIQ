@@ -4,7 +4,7 @@ import { Lead } from "src/common/interfaces/lead.interface";
 import LeadNormalizer from "src/engines/leads/lead.normalizer";
 import { LeadScoringEngine } from "src/engines/leads/lead.scoring";
 import { CreateLeadDto, AllLeadsQueryDto } from "@/common/repos/query.dto";
-import { EventService } from "@/services/emitter.service";
+import { EventService } from "@/common/services/emitter.service";
 
 @Injectable()
 export class LeadsService {

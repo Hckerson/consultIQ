@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { Lead } from "generated/prisma/client";
+import { LeadRepo } from "@/common/repos/lead.repo";
 import { leadConfig } from "@/common/config/lead.config";
-import { EventService } from "@/services/emitter.service";
 import { ContractRepo } from "@/common/repos/contract.repo";
+import { EventService } from "@/common/services/emitter.service";
 import { LeadDecision, RiskLevel } from "@/common/types/lead.type";
 import { LeadClientInfo } from "@/common/interfaces/lead.interface";
-import { LeadRepo } from "@/common/repos/lead.repo";
 
 @Injectable()
 export class LeadDecisionEngine {
