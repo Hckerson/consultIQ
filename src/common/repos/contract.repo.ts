@@ -1,7 +1,7 @@
 import { Contract } from "generated/prisma/client.js";
 import { RepositoryError } from "../errors/repo.error";
 import { HttpStatus, Injectable } from "@nestjs/common";
-import { PrismaService } from "@/common/services/database/prisma.service";
+import { PrismaService } from "@/common/database/prisma.service";
 import {
   AllContractsQueryDto,
   CountContractQueryDto,
