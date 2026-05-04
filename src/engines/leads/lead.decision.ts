@@ -19,19 +19,19 @@ export class LeadDecisionEngine {
 
   initializeListner() {
     this.emitter.registerListeners("LEAD_UPDATED", async (lead: Lead[]) => {
-      await this.decide(lead[0]);
+      await this.update(lead[0]);
     });
   }
 
-  async decide(lead: Lead): Promise<void> {
-    const decision = await this.recalculate(lead);
+  async update(lead: Lead): Promise<void> {
+    const decision = await this.decide(lead);
     await this.leadRepo.updateLead({
       where: { id: lead.id },
       data: { status: decision },
     });
   }
 
-  async recalculate(lead: Lead): Promise<LeadDecision> {
+  async decide(lead: Lead): Promise<LeadDecision> {
     const { score, clientInfo } = lead;
     const level: RiskLevel =
       score <= leadConfig.riskThresholds.low

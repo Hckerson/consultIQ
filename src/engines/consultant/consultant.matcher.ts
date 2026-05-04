@@ -4,6 +4,35 @@ import { skillSetKeywords } from "@/common/data/determinants.data";
 import { PrismaService } from "@/common/database/prisma.service";
 import { idealConsultantSuccessRate } from "@/common/data/weights.data";
 import { Lead, LeadBlocker } from "src/common/interfaces/lead.interface";
+import { Prisma } from "generated/prisma/client";
+
+export type MatchedConsultant = Prisma.ConsultantGetPayload<{
+  include: {
+    user: true;
+    qualification: {
+      include: {
+        specialization: {
+          select: {
+            title: true;
+          };
+        };
+        otherQualifications: {
+          select: {
+            title: true;
+          };
+        };
+      };
+    };
+    skillSet: true;
+    bookings: true;
+  };
+}>;
+// The final return structure of the matchConsultant function
+export interface ConsultantMatchResult {
+  requiredSkillSets: SkillSet[];
+  subFinalMatch: MatchedConsultant[];
+  finalMatch: MatchedConsultant[];
+}
 
 @Injectable()
 export class ConsultantMatchingEngine {
@@ -33,7 +62,7 @@ export class ConsultantMatchingEngine {
   }
 
   // check  later for time constraints
-  async matchConsultant(lead: Lead) {
+  async matchConsultant(lead: Lead): Promise<ConsultantMatchResult> {
     const { clientInfo, blockers } = lead;
 
     const requiredSkillSets = this.extractRequiredSkillSets(blockers);
