@@ -5,13 +5,13 @@ export default function LeadNormalizer(lead: Lead): Lead {
     blockers: {
       needs: lead.blockers.needs
         .filter((need) => need.trim())
-        .map((need) => need.trim()),
+        .map((need) => need),
       problems: lead.blockers.problems
         .filter((problem) => problem.trim())
-        .map((problem) => problem.trim()),
+        .map((problem) => problem),
       situation: lead.blockers.situation
         .filter((situation) => situation.trim())
-        .map((situation) => situation.trim()),
+        .map((situation) => situation),
     },
     clientInfo: {
       location: lead.clientInfo.location.trim() || "",
