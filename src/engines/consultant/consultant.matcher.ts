@@ -4,6 +4,35 @@ import { skillSetKeywords } from "@/common/data/determinants.data";
 import { PrismaService } from "@/common/database/prisma.service";
 import { idealConsultantSuccessRate } from "@/common/data/weights.data";
 import { Lead, LeadBlocker } from "src/common/interfaces/lead.interface";
+import { Prisma } from "generated/prisma/client";
+
+export type MatchedConsultant = Prisma.ConsultantGetPayload<{
+  include: {
+    user: true;
+    qualification: {
+      include: {
+        specialization: {
+          select: {
+            title: true;
+          };
+        };
+        otherQualifications: {
+          select: {
+            title: true;
+          };
+        };
+      };
+    };
+    skillSet: true;
+    bookings: true;
+  };
+}>;
+
+export interface ConsultantMatchResult {
+  match: MatchedConsultant[];
+  requiredSkillSet: SkillSet[];
+  alternatives?: MatchedConsultant[];
+}
 
 @Injectable()
 export class ConsultantMatchingEngine {
@@ -32,11 +61,10 @@ export class ConsultantMatchingEngine {
     return Array.from(requiredSkills);
   }
 
-  // check  later for time constraints
-  async matchConsultant(lead: Lead) {
+  async matchConsultant(lead: Lead): Promise<ConsultantMatchResult> {
     const { clientInfo, blockers } = lead;
 
-    const requiredSkillSets = this.extractRequiredSkillSets(blockers);
+    const requiredSkillSet = this.extractRequiredSkillSets(blockers);
 
     const foundConsultants = await this.prisma.consultant.findMany({
       where: {
@@ -91,29 +119,32 @@ export class ConsultantMatchingEngine {
 
     const subFinalMatch = [];
 
-    const bestMatch = foundConsultants.filter(
+    const match = foundConsultants.filter(
       (consultant) => consultant.qualification?.specialization?.title,
     );
 
-    subFinalMatch.push(...bestMatch);
+    subFinalMatch.push(...match);
 
-    if (!subFinalMatch.length || subFinalMatch.length === 0) {
-      const alternatives = foundConsultants.filter(
-        (c) => !bestMatch.includes(c),
-      );
+    const alternatives = foundConsultants.filter((c) => !match.includes(c));
+
+    const noRoleExpert = !subFinalMatch.length || subFinalMatch.length === 0;
+
+    if (noRoleExpert) {
       subFinalMatch.push(...alternatives);
     }
 
-    const finalMatch = subFinalMatch.filter((f) =>
-      f.skillSet.some((s) => requiredSkillSets.includes(s.name)),
+    const bestMatch = subFinalMatch.filter((f) =>
+      f.skillSet.some((s) => requiredSkillSet.includes(s.name)),
+    );
+
+    const bestAlternatives = alternatives.filter((a) =>
+      a.skillSet.some((s) => requiredSkillSet.includes(s.name)),
     );
 
     return {
-      requiredSkillSets,
-      subFinalMatch,
-      finalMatch,
+      match: bestMatch,
+      requiredSkillSet,
+      ...(noRoleExpert ? {} : { alternatives: bestAlternatives }),
     };
   }
-  
-  
 }

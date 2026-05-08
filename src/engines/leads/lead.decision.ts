@@ -14,10 +14,10 @@ export class LeadDecisionEngine {
     private readonly emitter: EventService,
     private readonly contractRepo: ContractRepo,
   ) {
-    this.initializeListner();
+    this.initializeListners();
   }
 
-  initializeListner() {
+  initializeListners() {
     this.emitter.registerListeners("LEAD_UPDATED", async (lead: Lead[]) => {
       await this.update(lead[0]);
     });
@@ -42,7 +42,6 @@ export class LeadDecisionEngine {
     const info = clientInfo as string;
     const information = JSON.parse(info) as LeadClientInfo;
 
-    // find past dealings
     const pastDealings =
       (await this.contractRepo.countContract({
         companyName: information.companyName,
