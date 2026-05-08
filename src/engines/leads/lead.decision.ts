@@ -14,10 +14,10 @@ export class LeadDecisionEngine {
     private readonly emitter: EventService,
     private readonly contractRepo: ContractRepo,
   ) {
-    this.initializeListner();
+    this.initializeListners();
   }
 
-  initializeListner() {
+  initializeListners() {
     this.emitter.registerListeners("LEAD_UPDATED", async (lead: Lead[]) => {
       await this.update(lead[0]);
     });
