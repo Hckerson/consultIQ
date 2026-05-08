@@ -27,7 +27,7 @@ export type MatchedConsultant = Prisma.ConsultantGetPayload<{
     bookings: true;
   };
 }>;
-// The final return structure of the matchConsultant function
+
 export interface ConsultantMatchResult {
   match: MatchedConsultant[];
   requiredSkillSet: SkillSet[];
@@ -61,7 +61,6 @@ export class ConsultantMatchingEngine {
     return Array.from(requiredSkills);
   }
 
-  // check  later for time constraints
   async matchConsultant(lead: Lead): Promise<ConsultantMatchResult> {
     const { clientInfo, blockers } = lead;
 

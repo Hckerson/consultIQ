@@ -42,7 +42,6 @@ export class LeadDecisionEngine {
     const info = clientInfo as string;
     const information = JSON.parse(info) as LeadClientInfo;
 
-    // find past dealings
     const pastDealings =
       (await this.contractRepo.countContract({
         companyName: information.companyName,

@@ -8,6 +8,8 @@ export class ConsultantRankingEngine {
   rankConsultants(payload: ConsultantMatchResult) {
     const { match, alternatives, requiredSkillSet } = payload;
 
+    // should add booking somewhere
+
     const matchWithCount = match.map((consultant) => {
       const skillCount = consultant.skillSet.filter((skill) =>
         requiredSkillSet.includes(skill.name),
