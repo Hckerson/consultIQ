@@ -1,4 +1,4 @@
-import type { SkillSet } from "../types/types";
+import { SkillSet } from "generated/prisma/client";
 
 const favourableLocation = ["USA", "UK", "Canada", "Australia", "New Zealand"];
 const unfavourableLocation = [
@@ -27,8 +27,6 @@ const unfavourableIndustry = [
   "Retail",
 ];
 
-
-
 const timeline = {
   short: 3,
   medium: 6,
@@ -42,33 +40,72 @@ const desireLength = {
 };
 
 const skillSetKeywords: Record<SkillSet, string[]> = {
-  "Problem_Solving": [
-    "analytical", "critical thinking", "troubleshooting", "innovation", "creativity", 
-    "situation", "risk", "security", "scope", "technology", "infrastructure"
+  PROBLEM_SOLVING: [
+    "analytical",
+    "critical thinking",
+    "troubleshooting",
+    "innovation",
+    "creativity",
+    "situation",
+    "risk",
+    "security",
+    "scope",
+    "technology",
+    "infrastructure",
   ],
-  "Communication": [
-    "verbal", "written", "presentation", "negotiation", "listening", 
-    "communication", "alignment", "stakeholders"
+  COMMUNICATION: [
+    "verbal",
+    "written",
+    "presentation",
+    "negotiation",
+    "listening",
+    "communication",
+    "alignment",
+    "stakeholders",
   ],
-  "Teamwork": [
-    "collaboration", "cooperation", "support", "conflict resolution", "interpersonal", 
-    "culture", "bandwidth"
+  TEAMWORK: [
+    "collaboration",
+    "cooperation",
+    "support",
+    "conflict resolution",
+    "interpersonal",
+    "culture",
+    "bandwidth",
   ],
-  "Leadership": [
-    "management", "mentoring", "strategic", "decision making", "delegation", 
-    "leadership", "companySize", "resources", "budget", "cost", "approval"
+  LEADERSHIP: [
+    "management",
+    "mentoring",
+    "strategic",
+    "decision making",
+    "delegation",
+    "leadership",
+    "companySize",
+    "resources",
+    "budget",
+    "cost",
+    "approval",
   ],
-  "Adaptability": [
-    "flexibility", "resilience", "change management", "agile", "versatile", 
-    "experience", "market", "industry", "location"
+  ADAPTABILITY: [
+    "flexibility",
+    "resilience",
+    "change management",
+    "agile",
+    "versatile",
+    "experience",
+    "market",
+    "industry",
+    "location",
   ],
-  "Time_Management": [
-    "organization", "planning", "prioritization", "efficiency", "punctuality", 
-    "time", "urgency"
+  TIME_MANAGEMENT: [
+    "organization",
+    "planning",
+    "prioritization",
+    "efficiency",
+    "punctuality",
+    "time",
+    "urgency",
   ],
-  "Other": [
-    "compliance", "regulatory", "legal"
-  ]
+  OTHER: ["compliance", "regulatory", "legal"],
 };
 
 export {
