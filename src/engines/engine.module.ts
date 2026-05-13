@@ -1,25 +1,13 @@
 import { Module } from "@nestjs/common";
 import { RepoModule } from "@/common/repos/repo.module";
-import { LeadScoringEngine } from "./leads/lead.scoring";
-import { LeadDecisionEngine } from "./leads/lead.decision";
-import { ConsultantMatchingEngine } from "./consultant/consultant.matcher";
-import { ConsultantRankingEngine } from "./consultant/consultant.ranker";
+
+import { ConsultantMatchingEngine } from "../modules/core/consultant/engines/consultant.matcher";
+import { ConsultantRankingEngine } from "../modules/core/consultant/engines/consultant.ranker";
 import { EventService } from "@/common/services/emitter.service";
 
 @Module({
   imports: [RepoModule],
-  providers: [
-    EventService,
-    LeadScoringEngine,
-    LeadDecisionEngine,
-    ConsultantMatchingEngine,
-    ConsultantRankingEngine,
-  ],
-  exports: [
-    LeadScoringEngine,
-    LeadDecisionEngine,
-    ConsultantMatchingEngine,
-    ConsultantRankingEngine,
-  ],
+  providers: [EventService, ConsultantMatchingEngine, ConsultantRankingEngine],
+  exports: [ConsultantMatchingEngine, ConsultantRankingEngine],
 })
 export class EngineModule {}

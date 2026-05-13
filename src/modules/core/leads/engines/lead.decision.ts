@@ -49,17 +49,17 @@ export class LeadDecisionEngine {
       })) || 0;
 
     if (level == "HIGH") {
-      if (pastDealings < leadConfig.priority.low) {
+      if (pastDealings <= leadConfig.priority.high) {
         return "REJECT";
-      } else if (pastDealings < leadConfig.priority.high) {
+      } else if (pastDealings <= leadConfig.priority.veryHigh) {
         return "HOLD";
       } else {
         return "PURSUE";
       }
     } else if (level == "MEDIUM") {
-      if (pastDealings < leadConfig.priority.medium) {
+      if (pastDealings <= leadConfig.priority.medium) {
         return "HOLD";
-      } else if (pastDealings < leadConfig.priority.high) {
+      } else if (pastDealings <= leadConfig.priority.high) {
         return "PURSUE";
       } else {
         return "PRIORITY_PURSUE";

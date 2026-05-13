@@ -28,5 +28,6 @@ export const leadConfig = {
     low: 1,
     medium: 3,
     high: 5,
+    veryHigh: 8,
   },
 };
