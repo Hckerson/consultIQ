@@ -1,7 +1,7 @@
 import { Experience } from "./interface";
 import { Type } from "class-transformer";
 import { BaseBooking, BaseUser } from "./base.interface";
-import type { SkillLevel, SkillSet } from "../types/types";
+import { SkillLevel, SkillSet } from "generated/prisma/enums";
 import type { ConsultantSpecialization } from "../types/consultant.type";
 import { IsNumber, IsArray, ValidateNested, IsIn } from "class-validator";
 

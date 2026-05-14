@@ -4,7 +4,7 @@ type Weights =
   | "industry"
   | "strategicValue"
   | "scopeClarity";
-type Levels = "low" | "medium" | "high";
+type Levels = "LOW" | "MEDIUM" | "HIGH";
 type LeadDecision = "REJECT" | "HOLD" | "PURSUE" | "PRIORITY_PURSUE";
 type RiskLevel = Levels;
 

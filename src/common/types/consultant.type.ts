@@ -1,11 +1,11 @@
 type Specialization =
-  | "Technology"
-  | "Business"
-  | "Finance"
-  | "Marketing"
-  | "Sales"
-  | "Human Resources"
-  | "Other";
+  | "TECHNOLOGY"
+  | "BUSINESS"
+  | "FINANCE"
+  | "MARKETING"
+  | "SALES"
+  | "HUMAN_RESOURCES"
+  | "OTHER";
 
 type ConsultantSpecialization = Specialization;
 

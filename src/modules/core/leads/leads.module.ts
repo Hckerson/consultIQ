@@ -2,8 +2,8 @@ import { Module } from "@nestjs/common";
 import { LeadsService } from "./leads.service";
 import { LeadsController } from "./leads.controller";
 import { RepoModule } from "@/common/repos/repo.module";
+import { LeadScoringEngine } from "./engines/lead.scoring";
 import { EventService } from "@/common/services/emitter.service";
-import { LeadScoringEngine } from "src/engines/leads/lead.scoring";
 
 @Module({
   imports: [RepoModule],

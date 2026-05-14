@@ -7,6 +7,7 @@ import { EventService } from "@/common/services/emitter.service";
 import { LeadDecision, RiskLevel } from "@/common/types/lead.type";
 import { LeadClientInfo } from "@/common/interfaces/lead.interface";
 
+
 @Injectable()
 export class LeadDecisionEngine {
   constructor(
@@ -35,10 +36,10 @@ export class LeadDecisionEngine {
     const { score, clientInfo } = lead;
     const level: RiskLevel =
       score <= leadConfig.riskThresholds.low
-        ? "high"
+        ? "HIGH"
         : score <= leadConfig.riskThresholds.medium
-          ? "medium"
-          : "low";
+          ? "MEDIUM"
+          : "LOW";
     const info = clientInfo as string;
     const information = JSON.parse(info) as LeadClientInfo;
 
@@ -47,18 +48,18 @@ export class LeadDecisionEngine {
         companyName: information.companyName,
       })) || 0;
 
-    if (level == "high") {
-      if (pastDealings < leadConfig.priority.low) {
+    if (level == "HIGH") {
+      if (pastDealings <= leadConfig.priority.high) {
         return "REJECT";
-      } else if (pastDealings < leadConfig.priority.high) {
+      } else if (pastDealings <= leadConfig.priority.veryHigh) {
         return "HOLD";
       } else {
         return "PURSUE";
       }
-    } else if (level == "medium") {
-      if (pastDealings < leadConfig.priority.medium) {
+    } else if (level == "MEDIUM") {
+      if (pastDealings <= leadConfig.priority.medium) {
         return "HOLD";
-      } else if (pastDealings < leadConfig.priority.high) {
+      } else if (pastDealings <= leadConfig.priority.high) {
         return "PURSUE";
       } else {
         return "PRIORITY_PURSUE";

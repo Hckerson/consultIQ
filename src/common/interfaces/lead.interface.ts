@@ -65,6 +65,7 @@ export class LeadClientInfo {
   @IsString()
   companyName: string;
 
+  // replaced with real niches in actual specializations
   @IsString()
   niche: string;
 
@@ -81,8 +82,19 @@ export class LeadTermination {
   percentageRefund: number;
 }
 
+export class LeadResource {
+  @IsNumber()
+  budget: number;
+
+  @IsIn(["1-3", "3-6", "6-12"])
+  duration: string;
+
+  @IsIn(["URGENT", "HIGH", "MEDIUM", "LOW"])
+  urgency: string;
+}
+
 export class LeadResponse {
-  @IsIn(["reject", "hold", "pursue", "priority-pursue"])
+  @IsIn(["REJECT", "HOLD", "PURSUE", "PRIORITY_PURSUE"])
   decision: LeadDecision;
 }
 
@@ -94,6 +106,10 @@ export class Lead {
   @ValidateNested()
   @Type(() => LeadClientInfo)
   clientInfo: LeadClientInfo;
+
+  @ValidateNested()
+  @Type(() => LeadResource)
+  resource: LeadResource;
 
   @ValidateNested()
   @Type(() => LeadTermination)

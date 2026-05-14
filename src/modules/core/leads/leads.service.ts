@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { LeadRepo } from "@/common/repos/lead.repo";
+import LeadNormalizer from "./engines/lead.normalizer";
+import { LeadScoringEngine } from "./engines/lead.scoring";
 import { Lead } from "src/common/interfaces/lead.interface";
-import LeadNormalizer from "src/engines/leads/lead.normalizer";
-import { LeadScoringEngine } from "src/engines/leads/lead.scoring";
-import { CreateLeadDto, AllLeadsQueryDto } from "@/common/repos/query.dto";
 import { EventService } from "@/common/services/emitter.service";
+import { CreateLeadDto, AllLeadsQueryDto } from "@/common/repos/query.dto";
 
 @Injectable()
 export class LeadsService {

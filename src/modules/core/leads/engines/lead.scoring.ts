@@ -1,8 +1,7 @@
 import { logger } from "src/lib/logger";
 import { Injectable } from "@nestjs/common";
+import { leadConfig } from "@/common/config/lead.config";
 import { Lead } from "src/common/interfaces/lead.interface";
-import { leadConfig } from "../../common/config/lead.config";
-
 import { clientInfoWeights } from "@/common/data/weights.data";
 import {
   LeadBlocker,

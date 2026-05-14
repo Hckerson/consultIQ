@@ -1,10 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import { SkillSet } from "@/common/types/types";
+import { Prisma, SkillSet } from "generated/prisma/client";
 import { skillSetKeywords } from "@/common/data/determinants.data";
 import { PrismaService } from "@/common/database/prisma.service";
 import { idealConsultantSuccessRate } from "@/common/data/weights.data";
 import { Lead, LeadBlocker } from "src/common/interfaces/lead.interface";
-import { Prisma } from "generated/prisma/client";
 
 export type MatchedConsultant = Prisma.ConsultantGetPayload<{
   include: {
